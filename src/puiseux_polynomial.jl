@@ -24,7 +24,7 @@ coefficient_field(R::PuiseuxPolynomialRing) = base_ring(base_ring(R))
 
 #################################################################################
 #
-# A Puiseux polynomial can be uniquely written of the form
+# A Puiseux polynomial can be written of the form
 #
 #   t^{k//d} * (c_0 * t^(0//d) + ... + c_r * t^(r//d)).
 #
