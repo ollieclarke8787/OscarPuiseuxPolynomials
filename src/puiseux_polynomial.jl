@@ -109,11 +109,6 @@ end
 
 function ==(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
     @assert parent(f) == parent(g) "elements must be in the same ring"
-
-    # bring f and g in standard form
-    normalize!(f)
-    normalize!(g)
-
     return poly(f) == poly(g) && shift(f) == shift(g) && scale(f) == scale(g)
 end
 
