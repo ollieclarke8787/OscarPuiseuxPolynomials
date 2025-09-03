@@ -6,7 +6,7 @@ computer algebra system [[https://www.oscar-system.org/][OSCAR]].
 
 The ring of Puiseux polynomials over a coefficient field $K$ is defined as
 
-$$ K\{t\} = \left\{ \sum_{i\geq k} c_{i/d} t^{i/d} \mid d\in\mathbb{Z}_{>0}, k\in\mathbb{Z}_{\geq 0}, c_{i/d}\in K \right\}. $$
+$$ K\{t\} = \left\{ \sum_{k=k_0}^{k_1} c_{k/d} t^{k/d} \mid d\in\mathbb{Z}_{>0}, k_0,k_1\in\mathbb{Z}_{\geq 0}, k_0\leq k_1, c_{i/d}\in K \right\}. $$
 
 This package is meant to be used in conjunction with OSCAR and should
 interoperate with many features in OSCAR, such as
