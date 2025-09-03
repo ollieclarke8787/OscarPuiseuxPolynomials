@@ -130,8 +130,9 @@ function exponents(f::PuiseuxPolynomialRingElem)
     return [(i + k) // d for i in underlying_exponents]
 end
 
-function puiseux_polynomial_ring(K::Field, variableName::String="t")
-    base_ring, _ = Oscar.polynomial_ring(K, [variableName])
+function puiseux_polynomial_ring(K::Field, variableName::Vector{String}=["t"])
+    @assert length(variableName)==1 "multivariate puiseux polynomials not supported"
+    base_ring, _ = Oscar.polynomial_ring(K, variableName)
     Kt = PuiseuxPolynomialRing(base_ring)
     t = gen(Kt)
     return Kt, t

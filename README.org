@@ -1,8 +1,8 @@
 * OscarPuiseuxPolynomials.jl
 
 ** Introduction
-This software package contains implements univariate Puiseux polynomials for the
-computer algebra system [[https://www.oscar-system.org/][OSCAR]].
+This software package contains implements sparse univariate Puiseux polynomials
+for the computer algebra system [[https://www.oscar-system.org/][OSCAR]].
 
 The ring of Puiseux polynomials over a coefficient field $K$ is defined as
 
