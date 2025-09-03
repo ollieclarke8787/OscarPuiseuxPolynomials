@@ -3,7 +3,7 @@ using FiniteSparsePuiseuxSeries
 using Oscar
 
 
-R, x = finite_sparse_puiseux_series_ring(QQ, "x")
+R, x = puiseux_polynomial_ring(QQ, "x")
 length(x)
 x^QQ(1//2)
 S = base_ring(R)

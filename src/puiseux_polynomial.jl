@@ -1,48 +1,67 @@
-struct FiniteSparsePuiseuxSeriesRing <: Ring
-    base_ring::MPolyRing
+#################################################################################
+#
+#  Puiseux polynomials
+#
+#################################################################################
 
-    function FiniteSparsePuiseuxSeriesRing(base_ring::MPolyRing)
-        @assert ngens(base_ring) == 1 "underlying ring must be a multivariate polynomial ring with one variable"
-        return new(base_ring)
+
+struct PuiseuxPolynomialRing <: Ring
+    polynomialRing::MPolyRing
+
+    function PuiseuxPolynomialRing(polynomialRing::MPolyRing)
+        @assert ngens(polynomialRing) == 1 "underlying ring must be a multivariate polynomial ring with one variable"
+        return new(polynomialRing)
     end
 end
 
-
-function Base.show(io::IO, R::FiniteSparsePuiseuxSeriesRing)
-    print(io, "Finite sparse Puiseux series ring over ", coefficient_field(R))
+function Base.show(io::IO, R::PuiseuxPolynomialRing)
+    print(io, "Puiseux polynomial ring over ", coefficient_field(R))
 end
 
-base_ring(R::FiniteSparsePuiseuxSeriesRing) = R.base_ring
-coefficient_field(R::FiniteSparsePuiseuxSeriesRing) = base_ring(base_ring(R))
-
-# gen(R::FiniteSparsePuiseuxSeriesRing) = gens(base_ring(R))[1] ## this should be of type FiniteSparsePuiseuxSeriesRingElem
+base_ring(R::PuiseuxPolynomialRing) = R.polynomialRing
+coefficient_field(R::PuiseuxPolynomialRing) = base_ring(base_ring(R))
 
 
-# given a puiseux series f = a_0 t^(k_0/d) + a_1 t^(k_1/d) + ... where k_0 < k_1 < ... integers
-# we represent it as a polynomial: a_0 + a_1 t^(k_1 - k_0) + ...
-# together with the shift k_0 and scale d
-mutable struct FiniteSparsePuiseuxSeriesRingElem <: RingElem
-    parent::FiniteSparsePuiseuxSeriesRing
+#################################################################################
+#
+# A Puiseux polynomial can be uniquely written of the form
+#
+#   t^{k//d} * (c_0 * t^(0//d) + ... + c_r * t^(r//d)).
+#
+# We store it as
+# - a (sparse) poly: c_0 * t^0 + ... + c_r * t^r
+# - a shift: k
+# - a scale: d
+#
+# All outputs are normalized and all inputs (excepd for the `normalized!`
+# function) are assumed to be normalized in the following sense, which makes
+# the representation unique:
+# - gcd(d, exponents of poly) = 1
+# - c_0 != 0
+#
+###
+mutable struct PuiseuxPolynomialRingElem <: RingElem
+    parent::PuiseuxPolynomialRing
     poly::MPolyRingElem
     shift::ZZRingElem
     scale::ZZRingElem
 
-    function FiniteSparsePuiseuxSeriesRingElem(Kt::FiniteSparsePuiseuxSeriesRing, f::MPolyRingElem, k::ZZRingElem = zero(ZZ), d::ZZRingElem = one(ZZ))
-        @assert parent(f) == base_ring(Kt) "polynomial must be in the underlying ring"
+    function PuiseuxPolynomialRingElem(Kt::PuiseuxPolynomialRing, f::MPolyRingElem, k::ZZRingElem = zero(ZZ), d::ZZRingElem = one(ZZ))
+        @assert parent(f) == base_ring(Kt) "polynomial must be in the base ring"
         @assert d > 0 "scale must be positive"
         return new(Kt, f, k, d)
     end
 end
 
-parent(f::FiniteSparsePuiseuxSeriesRingElem) = f.parent
-poly(f::FiniteSparsePuiseuxSeriesRingElem) = f.poly
-shift(f::FiniteSparsePuiseuxSeriesRingElem) = f.shift
-scale(f::FiniteSparsePuiseuxSeriesRingElem) = f.scale
+parent(f::PuiseuxPolynomialRingElem) = f.parent
+poly(f::PuiseuxPolynomialRingElem) = f.poly
+shift(f::PuiseuxPolynomialRingElem) = f.shift
+scale(f::PuiseuxPolynomialRingElem) = f.scale
 
-iszero(f::FiniteSparsePuiseuxSeriesRingElem) = iszero(poly(f))
-isone(f::FiniteSparsePuiseuxSeriesRingElem) = isone(poly(f)) && shift(f) == 0 && scale(f) == 1
+iszero(f::PuiseuxPolynomialRingElem) = iszero(poly(f))
+isone(f::PuiseuxPolynomialRingElem) = isone(poly(f)) && shift(f) == 0 && scale(f) == 1
 
-function Base.show(io::IO, f::FiniteSparsePuiseuxSeriesRingElem)
+function Base.show(io::IO, f::PuiseuxPolynomialRingElem)
     if iszero(f)
         print(io, "0")
         return
@@ -60,7 +79,7 @@ function Base.show(io::IO, f::FiniteSparsePuiseuxSeriesRingElem)
 end
 
 
-function normalize!(f::FiniteSparsePuiseuxSeriesRingElem)
+function normalize!(f::PuiseuxPolynomialRingElem)
     if iszero(f)
         return false
     end
@@ -88,7 +107,7 @@ function normalize!(f::FiniteSparsePuiseuxSeriesRingElem)
     return gcdExponents > 1 || smallestExp > 0
 end
 
-function ==(f::FiniteSparsePuiseuxSeriesRingElem, g::FiniteSparsePuiseuxSeriesRingElem)
+function ==(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
     @assert parent(f) == parent(g) "elements must be in the same ring"
 
     # bring f and g in standard form
@@ -98,33 +117,33 @@ function ==(f::FiniteSparsePuiseuxSeriesRingElem, g::FiniteSparsePuiseuxSeriesRi
     return poly(f) == poly(g) && shift(f) == shift(g) && scale(f) == scale(g)
 end
 
-function hash(f::FiniteSparsePuiseuxSeriesRingElem, h::UInt)
+function hash(f::PuiseuxPolynomialRingElem, h::UInt)
     normalize!(f)
     return hash((parent(f), poly(f), shift(f), scale(f)), h)
 end
 
-gen(R::FiniteSparsePuiseuxSeriesRing) = FiniteSparsePuiseuxSeriesRingElem(R, first(gens(base_ring(R))))
-zero(R::FiniteSparsePuiseuxSeriesRing) = FiniteSparsePuiseuxSeriesRingElem(R, zero(base_ring(R)))
-one(R::FiniteSparsePuiseuxSeriesRing) = FiniteSparsePuiseuxSeriesRingElem(R, one(base_ring(R)))
+gen(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, first(gens(base_ring(R))))
+zero(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, zero(base_ring(R)))
+one(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, one(base_ring(R)))
 
-coefficient_field(f::FiniteSparsePuiseuxSeriesRingElem) = coefficient_field(parent(f))
-coefficients(f::FiniteSparsePuiseuxSeriesRingElem) = coefficients(poly(f))
-function exponents(f::FiniteSparsePuiseuxSeriesRingElem)
+coefficient_field(f::PuiseuxPolynomialRingElem) = coefficient_field(parent(f))
+coefficients(f::PuiseuxPolynomialRingElem) = coefficients(poly(f))
+function exponents(f::PuiseuxPolynomialRingElem)
     d = scale(f)
     k = shift(f)
     underlying_exponents = first.(exponents(poly(f)))
     return [(i + k) // d for i in underlying_exponents]
 end
 
-function finite_sparse_puiseux_series_ring(K::Field, variableName::String="t")
+function puiseux_polynomial_ring(K::Field, variableName::String="t")
     base_ring, _ = Oscar.polynomial_ring(K, [variableName])
-    Kt = FiniteSparsePuiseuxSeriesRing(base_ring)
+    Kt = PuiseuxPolynomialRing(base_ring)
     t = gen(Kt)
     return Kt, t
 end
 
 
-function rescale(f::FiniteSparsePuiseuxSeriesRingElem, newScale::ZZRingElem)
+function rescale(f::PuiseuxPolynomialRingElem, newScale::ZZRingElem)
     # we assume f is normalized
     if newScale == scale(f)
         return f
@@ -137,11 +156,11 @@ function rescale(f::FiniteSparsePuiseuxSeriesRingElem, newScale::ZZRingElem)
     t = first(gens(base_ring(f)))
     newPoly = evaluate(poly(f), [t^scaleQuotient])
     newShift = shift(f) * scaleQuotient
-    return FiniteSparsePuiseuxSeriesRingElem(parent(f), newPoly, newShift, newScale)
+    return PuiseuxPolynomialRingElem(parent(f), newPoly, newShift, newScale)
 end
 
 
-function +(f::FiniteSparsePuiseuxSeriesRingElem, g::FiniteSparsePuiseuxSeriesRingElem)
+function +(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
     @assert parent(f) == parent(g) "elements must be in the same ring"
     if iszero(f)
         return g
@@ -159,7 +178,7 @@ function +(f::FiniteSparsePuiseuxSeriesRingElem, g::FiniteSparsePuiseuxSeriesRin
     newPoly = t^(shift(frescaled)-newShift)*poly(frescaled) + t^(shift(grescaled)-newShift)*poly(grescaled)
 
     # normalize output
-    fplusg = FiniteSparsePuiseuxSeriesRingElem(
+    fplusg = PuiseuxPolynomialRingElem(
         parent(f),
         newPoly,
         newShift,
@@ -168,15 +187,15 @@ function +(f::FiniteSparsePuiseuxSeriesRingElem, g::FiniteSparsePuiseuxSeriesRin
     return fplusg
 end
 
-function -(f::FiniteSparsePuiseuxSeriesRingElem)
-    return FiniteSparsePuiseuxSeriesRingElem(parent(f), -poly(f), shift(f), scale(f))
+function -(f::PuiseuxPolynomialRingElem)
+    return PuiseuxPolynomialRingElem(parent(f), -poly(f), shift(f), scale(f))
 end
 
-function -(f::FiniteSparsePuiseuxSeriesRingElem, g::FiniteSparsePuiseuxSeriesRingElem)
+function -(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
     return f + (-g)
 end
 
-function *(f::FiniteSparsePuiseuxSeriesRingElem, g::FiniteSparsePuiseuxSeriesRingElem)
+function *(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
     @assert parent(f) == parent(g) "elements must be in the same ring"
     if iszero(f) || iszero(g)
         return zero(parent(f))
@@ -191,7 +210,7 @@ function *(f::FiniteSparsePuiseuxSeriesRingElem, g::FiniteSparsePuiseuxSeriesRin
     newPoly = poly(f)*poly(g)
 
     # normalize output
-    ftimesg = FiniteSparsePuiseuxSeriesRingElem(
+    ftimesg = PuiseuxPolynomialRingElem(
         parent(f),
         newPoly,
         newShift,
@@ -201,11 +220,11 @@ function *(f::FiniteSparsePuiseuxSeriesRingElem, g::FiniteSparsePuiseuxSeriesRin
     return ftimesg
 end
 
-function length(f::FiniteSparsePuiseuxSeriesRingElem)
+function length(f::PuiseuxPolynomialRingElem)
     return length(poly(f))
 end
 
-function ^(f::FiniteSparsePuiseuxSeriesRingElem, a::QQFieldElem)
+function ^(f::PuiseuxPolynomialRingElem, a::QQFieldElem)
 
     if denominator(a) == 1
         return f^numerator(a)
@@ -213,13 +232,13 @@ function ^(f::FiniteSparsePuiseuxSeriesRingElem, a::QQFieldElem)
 
     @assert length(f) == 1 "only single-term series can be exponentiated to rational powers"
 
-    return FiniteSparsePuiseuxSeriesRingElem(
+    return PuiseuxPolynomialRingElem(
         parent(f),
         poly(f),
         shift(f)*numerator(a),
         scale(f)*denominator(a))
 end
 
-function ^(f::FiniteSparsePuiseuxSeriesRingElem, a::Rational{Int})
+function ^(f::PuiseuxPolynomialRingElem, a::Rational{Int})
     return f^(QQ(a))
 end
