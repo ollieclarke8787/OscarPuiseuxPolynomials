@@ -1,1 +1,1 @@
-export finite_sparse_puiseux_series_ring
+export puiseux_polynomial_ring
