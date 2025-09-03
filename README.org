@@ -1,0 +1,21 @@
+* OscarPuiseuxPolynomials.jl
+
+** Introduction
+This software package contains implements univariate Puiseux polynomials for the
+computer algebra system [[https://www.oscar-system.org/][OSCAR]].
+
+The ring of Puiseux polynomials over a coefficient field $K$ is defined as
+
+$$ K\{t\} = \left\{ \sum_{i\geq k} c_{i/d} t^{i/d} \mid d\in\ZZ_{>0}, k\in\ZZ_{\geq 0}, c_{i/d}\in K \right\}. $$
+
+This package is meant to be used in conjunction with OSCAR and should
+interoperate with many features in OSCAR, such as
+
++ working with matrices over $K\{t\}$
++ working with polynomials over $K\{t\}$
++ using $K\{t\}$ as codomain for tropical semiring maps
+
+** Similar Packages
+
+*** [[https://github.com/jmichel7/PuiseuxPolynomials.jl][PuiseuxPolynomials.jl]]
+A stand-alone julia package for multivariate Puiseux polynomials.
