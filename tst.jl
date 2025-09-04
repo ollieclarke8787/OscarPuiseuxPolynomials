@@ -1,9 +1,14 @@
 using Revise
-using FiniteSparsePuiseuxSeries
 using Oscar
+using OscarPuiseuxPolynomial
 
 
-R, x = puiseux_polynomial_ring(QQ, "x")
+Kt, t = puiseux_polynomial_ring(QQ, ["t"])
+Ktx, x = polynomial_ring(Kt, ["x"])
+
+
+
+
 length(x)
 x^QQ(1//2)
 S = base_ring(R)

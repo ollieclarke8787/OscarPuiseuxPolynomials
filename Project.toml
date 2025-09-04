@@ -1,6 +1,6 @@
-name = "FiniteSparsePuiseuxSeries"
+name = "OscarPuiseuxPolynomial"
 uuid = "208f2d51-8b9c-406a-8887-66ece6d8731d"
-authors = ["Oliver Clarke <oliver.clarke@durham.ac.uk>"]
+authors = ["Oliver Clarke <oliver.clarke@durham.ac.uk>", "Yue Ren <yue.ren2@durham.ac.uk>"]
 version = "0.1.0"
 
 [deps]
