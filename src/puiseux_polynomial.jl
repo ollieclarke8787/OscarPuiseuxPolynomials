@@ -27,25 +27,25 @@
 #
 #################################################################################
 
-struct PuiseuxPolynomialRing <: Ring
-    polynomialRing::MPolyRing
+struct PuiseuxPolynomialRing{T <: FieldElement} <: Ring
+    underlyingPolynomialRing::MPolyRing
 
-    function PuiseuxPolynomialRing(polynomialRing::MPolyRing)
-        @assert ngens(polynomialRing) == 1 "underlying ring must be a multivariate polynomial ring with one variable"
-        return new(polynomialRing)
+    function PuiseuxPolynomialRing(R::MPolyRing)
+        @assert ngens(R) == 1 "underlying ring must be a multivariate polynomial ring with one variable"
+        return new{elem_type(base_ring_type(R))}(R)
     end
 end
 
-mutable struct PuiseuxPolynomialRingElem <: RingElem
-    parent::PuiseuxPolynomialRing
+mutable struct PuiseuxPolynomialRingElem{T <: FieldElement} <: RingElem
+    parent::PuiseuxPolynomialRing{T}
     poly::MPolyRingElem
     shift::ZZRingElem
     scale::ZZRingElem
 
     function PuiseuxPolynomialRingElem(Kt::PuiseuxPolynomialRing, f::MPolyRingElem, k::ZZRingElem = zero(ZZ), d::ZZRingElem = one(ZZ))
-        @assert parent(f) == base_ring(Kt) "polynomial must be in the base ring"
+        @assert parent(f) == underlying_polynomial_ring(Kt) "polynomial must be in the underlying polynomial ring"
         @assert d > 0 "scale must be positive"
-        return new(Kt, f, k, d)
+        return new{elem_type(base_ring_type(parent(f)))}(Kt, f, k, d)
     end
 end
 
@@ -58,7 +58,7 @@ end
 
 function puiseux_polynomial_ring(K::Field, variableName::Vector{String}=["t"])
     @assert length(variableName)==1 "multivariate puiseux polynomials not supported"
-    base_ring, _ = Oscar.polynomial_ring(K, variableName)
+    base_ring, _ = polynomial_ring(K, variableName)
     Kt = PuiseuxPolynomialRing(base_ring)
     t = gen(Kt)
     return Kt, t
@@ -71,8 +71,9 @@ end
 #
 #################################################################################
 
-base_ring(R::PuiseuxPolynomialRing) = R.polynomialRing
-coefficient_field(R::PuiseuxPolynomialRing) = base_ring(base_ring(R))
+underlying_polynomial_ring(R::PuiseuxPolynomialRing) = R.underlyingPolynomialRing
+base_ring(R::PuiseuxPolynomialRing) = base_ring(underlying_polynomial_ring(R))
+coefficient_field(R::PuiseuxPolynomialRing) = base_ring(R)
 
 parent(f::PuiseuxPolynomialRingElem) = f.parent
 poly(f::PuiseuxPolynomialRingElem) = f.poly
@@ -92,14 +93,14 @@ function normalize!(f::PuiseuxPolynomialRingElem)
         return false
     end
 
-    baseRing = base_ring(f)
+    underlyingPolynomialRing = underlying_polynomial_ring(f)
 
     # make sure scale is correct, i.e., gcd of exponents is 1
     polyf = poly(f)
     exponentsf = first.(exponents(polyf))
     gcdExponents = gcd(vcat(exponentsf, scale(f)))
     if gcdExponents > 1
-        f.poly = sum([c*monomial(baseRing, [div(e, gcdExponents)]) for (c, e) in zip(coefficients(polyf), exponentsf)])
+        f.poly = sum([c*monomial(underlyingPolynomialRing, [div(e, gcdExponents)]) for (c, e) in zip(coefficients(polyf), exponentsf)])
         f.shift = div(f.shift, gcdExponents)
         f.scale = div(f.scale, gcdExponents)
     end
@@ -109,7 +110,7 @@ function normalize!(f::PuiseuxPolynomialRingElem)
     exponentsf = first.(exponents(polyf))
     smallestExp = exponentsf[end]
     if smallestExp > 0
-        f.poly = sum([c*monomial(baseRing, [e - smallestExp]) for (c, e) in zip(coefficients(polyf), exponentsf)])
+        f.poly = sum([c*monomial(underlyingPolynomialRing, [e - smallestExp]) for (c, e) in zip(coefficients(polyf), exponentsf)])
         f.shift += smallestExp
     end
     return gcdExponents > 1 || smallestExp > 0
@@ -126,7 +127,7 @@ function rescale(f::PuiseuxPolynomialRingElem, newScale::ZZRingElem)
     newScaleMultipleOfCurrentScale, scaleQuotient = divides(newScale, scale(f))
     @assert newScaleMultipleOfCurrentScale "new scale must be a multiple of the current scale"
 
-    t = first(gens(base_ring(f)))
+    t = first(gens(underlying_polynomial_ring(f)))
     newPoly = evaluate(poly(f), [t^scaleQuotient])
     newShift = shift(f) * scaleQuotient
     return PuiseuxPolynomialRingElem(parent(f), newPoly, newShift, newScale)
@@ -139,9 +140,13 @@ end
 #
 #################################################################################
 
-gen(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, first(gens(base_ring(R))))
-zero(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, zero(base_ring(R)))
-one(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, one(base_ring(R)))
+elem_type(::Type{PuiseuxPolynomialRing{T}}) where T <: FieldElement = PuiseuxPolynomialRingElem{T}
+parent_type(::Type{PuiseuxPolynomialRingElem{T}}) where T <: FieldElement = PuiseuxPolynomialRing{T}
+base_ring_type(::Type{PuiseuxPolynomialRing{T}}) where T <: FieldElement = parent_type(T)
+
+gen(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, first(gens(underlying_polynomial_ring(R))))
+zero(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, zero(underlying_polynomial_ring(R)))
+one(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, one(underlying_polynomial_ring(R)))
 
 function hash(f::PuiseuxPolynomialRingElem, h::UInt)
     normalize!(f)
@@ -188,7 +193,7 @@ function Base.show(io::IO, f::PuiseuxPolynomialRingElem)
         return
     end
 
-    t = first(gens(base_ring(f)))
+    t = first(gens(underlying_polynomial_ring(parent(f))))
     terms = []
     for (c, e) in zip(coefficients(poly(f)), first.(exponents(poly(f))))
         push!(terms, "$(c)*$(t)^($( (e + shift(f)) // scale(f) ))")
@@ -218,7 +223,7 @@ function +(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
 
     # add the polynomials, adjusting for shifts
     newShift = min(shift(frescaled), shift(grescaled))
-    t = first(gens(base_ring(f)))
+    t = first(gens(underlying_polynomial_ring(f)))
     newPoly = t^(shift(frescaled)-newShift)*poly(frescaled) + t^(shift(grescaled)-newShift)*poly(grescaled)
 
     # normalize output, in case of cancellations

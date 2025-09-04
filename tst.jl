@@ -1,9 +1,6 @@
-using Revise
-using Oscar
-using OscarPuiseuxPolynomial
-
-
+using Revise, Oscar, OscarPuiseuxPolynomial
 Kt, t = puiseux_polynomial_ring(QQ, ["t"])
+
 Ktx, x = polynomial_ring(Kt, ["x"])
 
 
