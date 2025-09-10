@@ -6,9 +6,9 @@ import Base:
     ==,
     ^,
     hash,
-    length
+    length,
     parent,
-    show,
+    show
 
 import Oscar:
     base_ring,
@@ -20,8 +20,7 @@ import Oscar:
     gen,
     isone,
     iszero,
-    normalize!
+    normalize!,
     one,
-    parent,
     parent_type,
-    zero,
+    zero
