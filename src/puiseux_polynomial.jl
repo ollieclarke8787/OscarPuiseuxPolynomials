@@ -265,8 +265,8 @@ function *(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
         return f
     end
 
-    # add shifts, multiple scales and polys
-    newShift = shift(f) + shift(g)
+    # add shifts, multiply scales and polys
+    newShift = shift(f)*scale(g) + shift(g)*scale(f)
     newScale = scale(f)*scale(g)
     newPoly = poly(f)*poly(g)
 
@@ -276,7 +276,8 @@ function *(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
         newPoly,
         newShift,
         newScale)
-    normalize!(ftimesg)
+    # todo: remove assertion after exhaustive testing
+    @assert !(normalize!(ftimesg)) "product was not normalized"
     return ftimesg
 end
 
