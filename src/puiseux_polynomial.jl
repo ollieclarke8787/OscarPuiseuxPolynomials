@@ -136,13 +136,24 @@ end
 
 #################################################################################
 #
-# Converstions
+# Conversions
 #
 #################################################################################
 
-function (Kt::PuiseuxPolynomialRing)(i::Int)
-    K = base_ring(Kt)
-    return K(i)
+function (Kt::PuiseuxPolynomialRing)(c::Int)
+    # TODO
+end
+
+function (Kt::PuiseuxPolynomialRing)(c::Rational{Int})
+    # TODO
+end
+
+function (Kt::PuiseuxPolynomialRing)(c::RingElem)
+    # TODO
+end
+
+function (Kt::PuiseuxPolynomialRing{T})(c::T) where T <: FieldElement
+    # TODO
 end
 
 #################################################################################
