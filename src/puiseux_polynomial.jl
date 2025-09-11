@@ -141,19 +141,22 @@ end
 #################################################################################
 
 function (Kt::PuiseuxPolynomialRing)(c::Int)
-    # TODO
+    return PuiseuxPolynomialRingElem(Kt,underlying_polynomial_ring(Kt)(c))
 end
 
 function (Kt::PuiseuxPolynomialRing)(c::Rational{Int})
-    # TODO
+    return PuiseuxPolynomialRingElem(Kt,underlying_polynomial_ring(Kt)(c))
 end
 
 function (Kt::PuiseuxPolynomialRing)(c::RingElem)
-    # TODO
+    return PuiseuxPolynomialRingElem(Kt,underlying_polynomial_ring(Kt)(c))
 end
 
 function (Kt::PuiseuxPolynomialRing{T})(c::T) where T <: FieldElement
-    # TODO
+    return PuiseuxPolynomialRingElem(Kt,underlying_polynomial_ring(Kt)(c))
+end
+function (Kt::PuiseuxPolynomialRing{T})(ct::PuiseuxPolynomialRingElem{T}) where T <: FieldElement
+    return ct
 end
 
 #################################################################################
