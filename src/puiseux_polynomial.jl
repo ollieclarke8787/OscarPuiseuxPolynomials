@@ -169,15 +169,14 @@ elem_type(::Type{PuiseuxPolynomialRing{T}}) where T <: FieldElement = PuiseuxPol
 parent_type(::Type{PuiseuxPolynomialRingElem{T}}) where T <: FieldElement = PuiseuxPolynomialRing{T}
 base_ring_type(::Type{PuiseuxPolynomialRing{T}}) where T <: FieldElement = parent_type(T)
 
-gen(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, first(gens(underlying_polynomial_ring(R))))
-zero(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, zero(underlying_polynomial_ring(R)))
-one(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, one(underlying_polynomial_ring(R)))
-
 function hash(f::PuiseuxPolynomialRingElem, h::UInt)
     normalize!(f)
     return hash((parent(f), poly(f), shift(f), scale(f)), h)
 end
 
+gen(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, first(gens(underlying_polynomial_ring(R))))
+zero(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, zero(underlying_polynomial_ring(R)))
+one(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, one(underlying_polynomial_ring(R)))
 iszero(f::PuiseuxPolynomialRingElem) = iszero(poly(f))
 isone(f::PuiseuxPolynomialRingElem) = isone(poly(f)) && shift(f) == 0 && scale(f) == 1
 
@@ -190,8 +189,8 @@ coefficients(f::PuiseuxPolynomialRingElem) = coefficients(poly(f))
 function exponents(f::PuiseuxPolynomialRingElem)
     d = scale(f)
     k = shift(f)
-    underlying_exponents = first.(exponents(poly(f)))
-    return [(i + k) // d for i in underlying_exponents]
+    underlyingExponents = first.(exponents(poly(f)))
+    return [(i + k) // d for i in underlyingExponents]
 end
 
 function length(f::PuiseuxPolynomialRingElem)
