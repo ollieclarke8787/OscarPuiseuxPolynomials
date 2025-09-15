@@ -197,6 +197,13 @@ function length(f::PuiseuxPolynomialRingElem)
     return length(poly(f))
 end
 
+function valuation(f::PuiseuxPolynomialRingElem)
+    if iszero(f)
+        return PosInf()
+    end
+    return shift(f) // scale(f)
+end
+
 
 #################################################################################
 #
