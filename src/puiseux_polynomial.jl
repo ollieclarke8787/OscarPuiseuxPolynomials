@@ -61,7 +61,7 @@ function puiseux_polynomial_ring(K::Field, variableName::Vector{String}=["t"])
     base_ring, _ = polynomial_ring(K, variableName)
     Kt = PuiseuxPolynomialRing(base_ring)
     t = gen(Kt)
-    return Kt, t
+    return Kt, [t]
 end
 
 
