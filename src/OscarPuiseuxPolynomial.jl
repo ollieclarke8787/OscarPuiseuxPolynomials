@@ -1,4 +1,4 @@
-module FiniteSparsePuiseuxSeries
+module OscarPuiseuxPolynomial
 
 using Oscar
 
