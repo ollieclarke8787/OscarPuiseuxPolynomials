@@ -1,8 +1,19 @@
 using Revise, Oscar, OscarPuiseuxPolynomial
-Kt, (t,) = puiseux_polynomial_ring(QQ, ["t"])
 
-Ktxy, (x,y) = polynomial_ring(Kt, ["x","y"])
-t*x+1 # does not work yet
+R,(x,y) = polynomial_ring(QQ, [:x,:y])
+f = x^2 + x*y
+
+Kt, (t1,t2) = puiseux_polynomial_ring(QQ, ["t1","t2"])
+monomials(t1+t1^(2//4)*t2^2)
+t1 * t1 - t2^2
+(t1-t2)^4
+
+
+puiseux_polynomial_ring_elem(Kt, (gens(Kt.underlyingPolynomialRing)[1])^2, ZZRingElem[0,0], ZZ(2))
+
+
+Kt, (t1,) = puiseux_polynomial_ring(QQ, ["t1"])
+valuation(t1+t1^(2//4)+t1^2) == 1//2
 
 
 

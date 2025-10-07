@@ -3,9 +3,7 @@
 # Puiseux polynomials
 # ===================
 #
-# !!! Currently only supports univariate Puiseux polynomials
-#
-# A Puiseux multivariate polynomial ring is just a wrapper around a normal
+# A multivariate Puiseux polynomial ring is just a wrapper around a normal
 # multivariate polynomial ring for the normal poly below.
 #
 # A Puiseux polynomial can be written of the form
@@ -27,28 +25,46 @@
 #
 #################################################################################
 
-struct PuiseuxPolynomialRing{T <: FieldElement} <: Ring
+struct MPuiseuxPolyRing{T <: FieldElement} <: Ring
     underlyingPolynomialRing::MPolyRing
 
-    function PuiseuxPolynomialRing(R::MPolyRing)
-        @assert ngens(R) == 1 "underlying ring must be a multivariate polynomial ring with one variable"
+    function MPuiseuxPolyRing(R::MPolyRing)
         return new{elem_type(base_ring_type(R))}(R)
     end
 end
 
-mutable struct PuiseuxPolynomialRingElem{T <: FieldElement} <: RingElem
-    parent::PuiseuxPolynomialRing{T}
+mutable struct MPuiseuxPolyRingElem{T <: FieldElement} <: RingElem
+    parent::MPuiseuxPolyRing{T}
     poly::MPolyRingElem
-    shift::ZZRingElem
+    shift::Vector{ZZRingElem}
     scale::ZZRingElem
 
-    function PuiseuxPolynomialRingElem(Kt::PuiseuxPolynomialRing, f::MPolyRingElem, k::ZZRingElem = zero(ZZ), d::ZZRingElem = one(ZZ))
+    function MPuiseuxPolyRingElem(
+        Kt::MPuiseuxPolyRing,
+        f::MPolyRingElem,
+        k::Vector{ZZRingElem} = zeros(ZZRingElem, nvars(Kt)),
+        d::ZZRingElem = one(ZZ)
+        )
+
         @assert parent(f) == underlying_polynomial_ring(Kt) "polynomial must be in the underlying polynomial ring"
         @assert d > 0 "scale must be positive"
         return new{elem_type(base_ring_type(parent(f)))}(Kt, f, k, d)
     end
 end
 
+function puiseux_polynomial_ring_elem(
+    Kt::MPuiseuxPolyRing,
+    f::MPolyRingElem,
+    k::Vector{ZZRingElem} = zeros(ZZRingElem, nvars(Kt)),
+    d::ZZRingElem = one(ZZ);
+    skip_normalization::Bool = false
+    )
+    pf = MPuiseuxPolyRingElem(Kt, f, k, d)
+    if !skip_normalization
+        normalize!(pf)
+    end
+    return pf
+end
 
 #################################################################################
 #
@@ -56,12 +72,11 @@ end
 #
 ##################################################################################
 
-function puiseux_polynomial_ring(K::Field, variableName::Vector{String}=["t"])
-    @assert length(variableName)==1 "multivariate puiseux polynomials not supported"
+function puiseux_polynomial_ring(K::Field, variableName::Vector{String})
+    @assert !isempty(variableName) "list of variables must not be empty"
     base_ring, _ = polynomial_ring(K, variableName)
-    Kt = PuiseuxPolynomialRing(base_ring)
-    t = gen(Kt)
-    return Kt, [t]
+    Kt = MPuiseuxPolyRing(base_ring)
+    return Kt, gens(Kt)
 end
 
 
@@ -71,15 +86,25 @@ end
 #
 #################################################################################
 
-underlying_polynomial_ring(R::PuiseuxPolynomialRing) = R.underlyingPolynomialRing
-base_ring(R::PuiseuxPolynomialRing) = base_ring(underlying_polynomial_ring(R))
-coefficient_field(R::PuiseuxPolynomialRing) = base_ring(R)
+underlying_polynomial_ring(R::MPuiseuxPolyRing) = R.underlyingPolynomialRing
+base_ring(R::MPuiseuxPolyRing) = base_ring(underlying_polynomial_ring(R))
+coefficient_ring(R::MPuiseuxPolyRing) = base_ring(R)
 
-parent(f::PuiseuxPolynomialRingElem) = f.parent
-poly(f::PuiseuxPolynomialRingElem) = f.poly
-shift(f::PuiseuxPolynomialRingElem) = f.shift
-scale(f::PuiseuxPolynomialRingElem) = f.scale
+parent(f::MPuiseuxPolyRingElem) = f.parent
+poly(f::MPuiseuxPolyRingElem) = f.poly
+shift(f::MPuiseuxPolyRingElem) = f.shift
+scale(f::MPuiseuxPolyRingElem) = f.scale
 
+
+#################################################################################
+#
+# Properties
+#
+#################################################################################
+
+nvars(R::MPuiseuxPolyRing) = nvars(underlying_polynomial_ring(R))
+coefficients(f::MPuiseuxPolyRingElem) = coefficients(poly(f))
+exponents(f::MPuiseuxPolyRingElem) = Vector{QQFieldElem}.(exponents(poly(f))) .// scale(f)
 
 #################################################################################
 #
@@ -87,50 +112,51 @@ scale(f::PuiseuxPolynomialRingElem) = f.scale
 #
 #################################################################################
 
-# WARNING: input may not be normalized
-function normalize!(f::PuiseuxPolynomialRingElem)
+# WARNING: input is not assumed to be normalized
+function normalize!(f::MPuiseuxPolyRingElem)
     if iszero(f)
         return false
     end
 
-    underlyingPolynomialRing = underlying_polynomial_ring(f)
+    underlyingPolynomialRing = underlying_polynomial_ring(parent(f))
 
-    # make sure scale is correct, i.e., gcd of exponents is 1
-    polyf = poly(f)
-    exponentsf = first.(exponents(polyf))
-    gcdExponents = gcd(vcat(exponentsf, scale(f)))
+    # make sure shift is correct, i.e., for every variable poly(f) has a
+    # monomial that is constant in that variable
+    shiftDifference = [ reduce(min,[e[i] for e in exponents(poly(f))]) for i in 1:nvars(parent(poly(f))) ]
+    if !iszero(shiftDifference)
+        t = gens(underlyingPolynomialRing)
+        f.poly = div(f.poly, prod(t.^(shiftDifference)))
+        f.shift += shiftDifference
+    end
+
+    # make sure scale is correct,
+    # i.e., gcd of numerators (= exponents of poly + shift) and denominatos (= scale) is 1
+    gcdExponents = gcd(vcat(scale(f), reduce(vcat,[e+shift(f) for e in exponents(poly(f))])))
     if gcdExponents > 1
-        f.poly = sum([c*monomial(underlyingPolynomialRing, [div(e, gcdExponents)]) for (c, e) in zip(coefficients(polyf), exponentsf)])
-        f.shift = div(f.shift, gcdExponents)
+        f.poly = sum([c*monomial(underlyingPolynomialRing, Int.(div.(e, gcdExponents))) for (c, e) in zip(coefficients(poly(f)), exponents(poly(f)))])
+        f.shift = div.(f.shift, gcdExponents)
         f.scale = div(f.scale, gcdExponents)
     end
 
-    # make sure shift is correct, i.e., poly(f) has a constant term
-    polyf = poly(f)
-    exponentsf = first.(exponents(polyf))
-    smallestExp = exponentsf[end]
-    if smallestExp > 0
-        f.poly = sum([c*monomial(underlyingPolynomialRing, [e - smallestExp]) for (c, e) in zip(coefficients(polyf), exponentsf)])
-        f.shift += smallestExp
-    end
-    return gcdExponents > 1 || smallestExp > 0
+    return !iszero(shiftDifference) || gcdExponents > 1
 end
 
 # WARNING: output may not be normalized
-function rescale(f::PuiseuxPolynomialRingElem, newScale::ZZRingElem)
+function rescale(f::MPuiseuxPolyRingElem, newScale::ZZRingElem)
+    @assert newScale > 0 "new scale must be positive"
+
     # we assume f is normalized
     if newScale == scale(f)
         return f
     end
-    @assert newScale > 0 "new scale must be positive"
 
     newScaleMultipleOfCurrentScale, scaleQuotient = divides(newScale, scale(f))
     @assert newScaleMultipleOfCurrentScale "new scale must be a multiple of the current scale"
 
-    t = first(gens(underlying_polynomial_ring(f)))
-    newPoly = evaluate(poly(f), [t^scaleQuotient])
+    t = gens(underlying_polynomial_ring(parent(f)))
+    newPoly = evaluate(poly(f), t .^ scaleQuotient)
     newShift = shift(f) * scaleQuotient
-    return PuiseuxPolynomialRingElem(parent(f), newPoly, newShift, newScale)
+    return MPuiseuxPolyRingElem(parent(f), newPoly, newShift, newScale)
 end
 
 
@@ -140,22 +166,22 @@ end
 #
 #################################################################################
 
-function (Kt::PuiseuxPolynomialRing)(c::Int)
-    return PuiseuxPolynomialRingElem(Kt,underlying_polynomial_ring(Kt)(c))
+function (Kt::MPuiseuxPolyRing)(c::Int)
+    return MPuiseuxPolyRingElem(Kt,underlying_polynomial_ring(Kt)(c))
 end
 
-function (Kt::PuiseuxPolynomialRing)(c::Rational{Int})
-    return PuiseuxPolynomialRingElem(Kt,underlying_polynomial_ring(Kt)(c))
+function (Kt::MPuiseuxPolyRing)(c::Rational{Int})
+    return MPuiseuxPolyRingElem(Kt,underlying_polynomial_ring(Kt)(c))
 end
 
-function (Kt::PuiseuxPolynomialRing)(c::RingElem)
-    return PuiseuxPolynomialRingElem(Kt,underlying_polynomial_ring(Kt)(c))
+function (Kt::MPuiseuxPolyRing)(c::RingElem)
+    return MPuiseuxPolyRingElem(Kt,underlying_polynomial_ring(Kt)(c))
 end
 
-function (Kt::PuiseuxPolynomialRing{T})(c::T) where T <: FieldElement
-    return PuiseuxPolynomialRingElem(Kt,underlying_polynomial_ring(Kt)(c))
+function (Kt::MPuiseuxPolyRing{T})(c::T) where T <: FieldElement
+    return MPuiseuxPolyRingElem(Kt,underlying_polynomial_ring(Kt)(c))
 end
-function (Kt::PuiseuxPolynomialRing{T})(ct::PuiseuxPolynomialRingElem{T}) where T <: FieldElement
+function (Kt::MPuiseuxPolyRing{T})(ct::MPuiseuxPolyRingElem{T}) where T <: FieldElement
     return ct
 end
 
@@ -165,43 +191,40 @@ end
 #
 #################################################################################
 
-elem_type(::Type{PuiseuxPolynomialRing{T}}) where T <: FieldElement = PuiseuxPolynomialRingElem{T}
-parent_type(::Type{PuiseuxPolynomialRingElem{T}}) where T <: FieldElement = PuiseuxPolynomialRing{T}
-base_ring_type(::Type{PuiseuxPolynomialRing{T}}) where T <: FieldElement = parent_type(T)
+elem_type(::Type{MPuiseuxPolyRing{T}}) where T <: FieldElement = MPuiseuxPolyRingElem{T}
+parent_type(::Type{MPuiseuxPolyRingElem{T}}) where T <: FieldElement = MPuiseuxPolyRing{T}
+base_ring_type(::Type{MPuiseuxPolyRing{T}}) where T <: FieldElement = parent_type(T)
 
-function hash(f::PuiseuxPolynomialRingElem, h::UInt)
+function hash(f::MPuiseuxPolyRingElem, h::UInt)
     normalize!(f)
     return hash((parent(f), poly(f), shift(f), scale(f)), h)
 end
 
-gen(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, first(gens(underlying_polynomial_ring(R))))
-zero(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, zero(underlying_polynomial_ring(R)))
-one(R::PuiseuxPolynomialRing) = PuiseuxPolynomialRingElem(R, one(underlying_polynomial_ring(R)))
-iszero(f::PuiseuxPolynomialRingElem) = iszero(poly(f))
-isone(f::PuiseuxPolynomialRingElem) = isone(poly(f)) && shift(f) == 0 && scale(f) == 1
+gens(R::MPuiseuxPolyRing) = puiseux_polynomial_ring_elem.(Ref(R), gens(underlying_polynomial_ring(R)))
+zero(R::MPuiseuxPolyRing) = puiseux_polynomial_ring_elem(R, zero(underlying_polynomial_ring(R)); skip_normalization=true)
+one(R::MPuiseuxPolyRing) = puiseux_polynomial_ring_elem(R, one(underlying_polynomial_ring(R)); skip_normalization=true)
+iszero(f::MPuiseuxPolyRingElem) = iszero(poly(f))
+isone(f::MPuiseuxPolyRingElem) = isone(poly(f)) && shift(f) == 0 && scale(f) == 1
 
-function ==(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
+function ==(f::MPuiseuxPolyRingElem, g::MPuiseuxPolyRingElem)
     @assert parent(f) == parent(g) "elements must be in the same ring"
     return poly(f) == poly(g) && shift(f) == shift(g) && scale(f) == scale(g)
 end
 
-coefficients(f::PuiseuxPolynomialRingElem) = coefficients(poly(f))
-function exponents(f::PuiseuxPolynomialRingElem)
-    d = scale(f)
-    k = shift(f)
-    underlyingExponents = first.(exponents(poly(f)))
-    return [(i + k) // d for i in underlyingExponents]
-end
+coefficients(f::MPuiseuxPolyRingElem) = coefficients(poly(f))
+exponents(f::MPuiseuxPolyRingElem) = [ (e + shift(f)) // scale(f) for e in exponents(poly(f)) ]
+monomials(f::MPuiseuxPolyRingElem) = puiseux_polynomial_ring_elem.(Ref(parent(f)), monomials(poly(f)), Ref(shift(f)), Ref(scale(f)))
 
-function length(f::PuiseuxPolynomialRingElem)
+function length(f::MPuiseuxPolyRingElem)
     return length(poly(f))
 end
 
-function valuation(f::PuiseuxPolynomialRingElem)
+function valuation(f::MPuiseuxPolyRingElem)
+    @assert nvars(parent(f)) == 1 "valuation is only defined for univariate Puiseux polynomials"
     if iszero(f)
         return PosInf()
     end
-    return shift(f) // scale(f)
+    return first(shift(f)) // scale(f)
 end
 
 
@@ -211,11 +234,11 @@ end
 #
 #################################################################################
 
-function Base.show(io::IO, R::PuiseuxPolynomialRing)
-    print(io, "Puiseux polynomial ring over ", coefficient_field(R))
+function Base.show(io::IO, R::MPuiseuxPolyRing)
+    print(io, "Puiseux polynomial ring over ", coefficient_ring(R))
 end
 
-function Base.show(io::IO, f::PuiseuxPolynomialRingElem)
+function Base.show(io::IO, f::MPuiseuxPolyRingElem)
     if iszero(f)
         print(io, "0")
         return
@@ -224,12 +247,33 @@ function Base.show(io::IO, f::PuiseuxPolynomialRingElem)
         return
     end
 
-    t = first(gens(underlying_polynomial_ring(parent(f))))
-    terms = []
-    for (c, e) in zip(coefficients(poly(f)), first.(exponents(poly(f))))
-        push!(terms, "$(c)*$(t)^($( (e + shift(f)) // scale(f) ))")
+    t = gens(underlying_polynomial_ring(parent(f)))
+    termStrings = []
+    for (c, e) in zip(coefficients(poly(f)), exponents(poly(f)))
+        exponentVector = (e + shift(f)) .// scale(f)
+        if iszero(exponentVector)
+            push!(termStrings, string(c))
+        else
+            monomialString = ""
+            for (ti, ei) in zip(t, exponentVector)
+                if iszero(ei)
+                    continue
+                elseif isone(ei)
+                    monomialString *= "*" * string(ti)
+                elseif denominator(ei) == 1
+                    monomialString *= "*" * string(ti) * "^" * string(numerator(ei))
+                else
+                    monomialString *= "*" * string(ti) * "^(" * string(ei) * ")"
+                end
+            end
+            if isone(c)
+                push!(termStrings, monomialString[2:end]) # remove leading "*"
+            else
+                push!(termStrings, string(c) * monomialString)
+            end
+        end
     end
-    print(io, join(terms, " + "))
+    print(io, join(termStrings, " + "))
 end
 
 
@@ -239,7 +283,7 @@ end
 #
 #################################################################################
 
-function +(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
+function +(f::MPuiseuxPolyRingElem, g::MPuiseuxPolyRingElem)
     @assert parent(f) == parent(g) "elements must be in the same ring"
     if iszero(f)
         return g
@@ -253,12 +297,12 @@ function +(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
     grescaled = rescale(g, newScale)
 
     # add the polynomials, adjusting for shifts
-    newShift = min(shift(frescaled), shift(grescaled))
-    t = first(gens(underlying_polynomial_ring(f)))
-    newPoly = t^(shift(frescaled)-newShift)*poly(frescaled) + t^(shift(grescaled)-newShift)*poly(grescaled)
+    newShift = min.(shift(frescaled), shift(grescaled))
+    t = gens(underlying_polynomial_ring(parent(f)))
+    newPoly = prod(t.^(shift(frescaled)-newShift))*poly(frescaled) + prod(t.^(shift(grescaled)-newShift))*poly(grescaled)
 
     # normalize output, in case of cancellations
-    fplusg = PuiseuxPolynomialRingElem(
+    fplusg = MPuiseuxPolyRingElem(
         parent(f),
         newPoly,
         newShift,
@@ -267,15 +311,15 @@ function +(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
     return fplusg
 end
 
-function -(f::PuiseuxPolynomialRingElem)
-    return PuiseuxPolynomialRingElem(parent(f), -poly(f), shift(f), scale(f))
+function -(f::MPuiseuxPolyRingElem)
+    return MPuiseuxPolyRingElem(parent(f), -poly(f), shift(f), scale(f))
 end
 
-function -(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
+function -(f::MPuiseuxPolyRingElem, g::MPuiseuxPolyRingElem)
     return f + (-g)
 end
 
-function *(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
+function *(f::MPuiseuxPolyRingElem, g::MPuiseuxPolyRingElem)
     @assert parent(f) == parent(g) "elements must be in the same ring"
     if iszero(f) || iszero(g)
         return zero(parent(f))
@@ -290,32 +334,36 @@ function *(f::PuiseuxPolynomialRingElem, g::PuiseuxPolynomialRingElem)
     newScale = scale(f)*scale(g)
     newPoly = poly(f)*poly(g)
 
-    # normalize output
-    ftimesg = PuiseuxPolynomialRingElem(
-        parent(f),
-        newPoly,
-        newShift,
-        newScale)
-    # todo: remove assertion after exhaustive testing
-    @assert !(normalize!(ftimesg)) "product was not normalized"
-    return ftimesg
+    return puiseux_polynomial_ring_elem(parent(f), newPoly, newShift, newScale)
 end
 
-function ^(f::PuiseuxPolynomialRingElem, a::QQFieldElem)
+function ^(f::MPuiseuxPolyRingElem, a::QQFieldElem)
 
     if denominator(a) == 1
         return f^numerator(a)
     end
 
-    @assert length(f) == 1 "only single-term series can be exponentiated to rational powers"
+    @assert length(f) == 1 "only monomials can be exponentiated to rational powers"
+    @assert isone(first(coefficients(f))) "only monomials with coefficient 1 can be exponentiated to rational powers"
 
-    return PuiseuxPolynomialRingElem(
+    return puiseux_polynomial_ring_elem(
         parent(f),
         poly(f),
         shift(f)*numerator(a),
-        scale(f)*denominator(a))
+        scale(f)*denominator(a);
+        skip_normalization=true
+    )
 end
 
-function ^(f::PuiseuxPolynomialRingElem, a::Rational{Int})
+function ^(f::MPuiseuxPolyRingElem, a::Rational{Int})
     return f^(QQ(a))
+end
+
+function //(f::MPuiseuxPolyRingElem{K}, a::K) where K <: FieldElement
+    @assert !iszero(a) "division by zero"
+    return puiseux_polynomial_ring_elem(parent(f), poly(f)*1//a, shift(f), scale(f); skip_normalization=true)
+end
+
+function //(f::MPuiseuxPolyRingElem, a::Int)
+    return f//coefficient_ring(f)(a)
 end
