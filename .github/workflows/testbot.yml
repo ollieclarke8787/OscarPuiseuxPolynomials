@@ -26,8 +26,8 @@ jobs:
       - uses: julia-actions/setup-julia@v2
       - uses: julia-actions/cache@v2
 
-      - name: Install Oscar
-        run: julia -e 'using Pkg; Pkg.add("Oscar")'
+      - name: Instantiate package
+        run: julia --project -e 'using Pkg; Pkg.instantiate()'
 
       - name: Run testbot
         run: |
