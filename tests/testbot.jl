@@ -1,12 +1,12 @@
 # This is testbot
 # The code in this file runs anytime code is pushed or a pull request is made to the main branch
 
-println("test")
+using Pkg
+Pkg.instantiate()
 
 using Oscar
 
 Kt, (t1,t2) = puiseux_polynomial_ring(QQ, ["t1","t2"])
 
-using Pkg
 Pkg.add(OscarPuiseuxPolynomial)
 using OscarPuiseuxPolynomial
