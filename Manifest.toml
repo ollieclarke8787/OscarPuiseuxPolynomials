@@ -2,7 +2,7 @@
 
 julia_version = "1.11.6"
 manifest_format = "2.0"
-project_hash = "65115cabba4ddcc4c529649a0e0a395536a9a242"
+project_hash = "f50b2c8cf099b1d3f535df835cd21297169ef500"
 
 [[deps.ASL_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -12,22 +12,21 @@ version = "0.1.3+0"
 
 [[deps.AbstractAlgebra]]
 deps = ["LinearAlgebra", "MacroTools", "Preferences", "Random", "RandomExtensions", "SparseArrays"]
-git-tree-sha1 = "c3ddcf6a7b4f45916b61f12d1921536766d30f43"
+git-tree-sha1 = "dc5edff637f5e6737128ea226c32fa242ebba3c0"
 uuid = "c3fe647b-3220-5bb0-a1ea-a7954cac585d"
-version = "0.45.3"
+version = "0.47.3"
 
     [deps.AbstractAlgebra.extensions]
     TestExt = "Test"
 
     [deps.AbstractAlgebra.weakdeps]
-    Requires = "ae029012-a4dd-5104-9daa-d747884805df"
     Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [[deps.AlgebraicSolving]]
 deps = ["LinearAlgebra", "Logging", "Markdown", "Nemo", "Printf", "Random", "StaticArrays", "msolve_jll"]
-git-tree-sha1 = "6cfe86dac4288f23b7773ec2dc067294139f980b"
+git-tree-sha1 = "bb1dac81e3e6405cd803ae4a04d223f88e59cc33"
 uuid = "66b61cbe-0446-4d5d-9090-1ff510639f9d"
-version = "0.9.1"
+version = "0.9.2"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
@@ -55,9 +54,9 @@ version = "1.0.9+0"
 
 [[deps.Compat]]
 deps = ["TOML", "UUIDs"]
-git-tree-sha1 = "0037835448781bb46feb39866934e243886d756a"
+git-tree-sha1 = "9d8a54ce4b17aa5bdce0ea5c34bc5e7c340d16ad"
 uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
-version = "4.18.0"
+version = "4.18.1"
 weakdeps = ["Dates", "LinearAlgebra"]
 
     [deps.Compat.extensions]
@@ -117,16 +116,20 @@ uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 version = "1.11.0"
 
 [[deps.GAP]]
-deps = ["AbstractAlgebra", "Artifacts", "BinaryWrappers", "Compat", "Downloads", "GAP_jll", "GAP_lib_jll", "GAP_pkg_ace_jll", "GAP_pkg_anupq_jll", "GAP_pkg_browse_jll", "GAP_pkg_caratinterface_jll", "GAP_pkg_cddinterface_jll", "GAP_pkg_cohomolo_jll", "GAP_pkg_crypting_jll", "GAP_pkg_curlinterface_jll", "GAP_pkg_cvec_jll", "GAP_pkg_datastructures_jll", "GAP_pkg_deepthought_jll", "GAP_pkg_digraphs_jll", "GAP_pkg_edim_jll", "GAP_pkg_ferret_jll", "GAP_pkg_float_jll", "GAP_pkg_fplsa_jll", "GAP_pkg_gauss_jll", "GAP_pkg_guava_jll", "GAP_pkg_io_jll", "GAP_pkg_json_jll", "GAP_pkg_juliainterface_jll", "GAP_pkg_kbmag_jll", "GAP_pkg_normalizinterface_jll", "GAP_pkg_nq_jll", "GAP_pkg_orb_jll", "GAP_pkg_profiling_jll", "GAP_pkg_semigroups_jll", "GAP_pkg_simpcomp_jll", "GAP_pkg_zeromqinterface_jll", "InteractiveUtils", "Libdl", "MacroTools", "Markdown", "Ncurses_jll", "Pidfile", "Pkg", "REPL", "Random", "Scratch", "Singular_jll", "TOML", "lib4ti2_jll", "nauty_jll"]
-git-tree-sha1 = "ec4c6db597a152ce9cfbe969373e2db4b6cc85b0"
+deps = ["AbstractAlgebra", "Artifacts", "BinaryWrappers", "Downloads", "FileWatching", "GAP_jll", "GAP_lib_jll", "GAP_pkg_ace_jll", "GAP_pkg_anupq_jll", "GAP_pkg_browse_jll", "GAP_pkg_caratinterface_jll", "GAP_pkg_cddinterface_jll", "GAP_pkg_cohomolo_jll", "GAP_pkg_crypting_jll", "GAP_pkg_curlinterface_jll", "GAP_pkg_cvec_jll", "GAP_pkg_datastructures_jll", "GAP_pkg_deepthought_jll", "GAP_pkg_digraphs_jll", "GAP_pkg_edim_jll", "GAP_pkg_ferret_jll", "GAP_pkg_float_jll", "GAP_pkg_fplsa_jll", "GAP_pkg_gauss_jll", "GAP_pkg_guava_jll", "GAP_pkg_io_jll", "GAP_pkg_json_jll", "GAP_pkg_juliainterface_jll", "GAP_pkg_kbmag_jll", "GAP_pkg_normalizinterface_jll", "GAP_pkg_nq_jll", "GAP_pkg_orb_jll", "GAP_pkg_profiling_jll", "GAP_pkg_semigroups_jll", "GAP_pkg_simpcomp_jll", "GAP_pkg_zeromqinterface_jll", "InteractiveUtils", "Libdl", "MacroTools", "Markdown", "REPL", "Random", "SHA", "Scratch", "Singular_jll", "lib4ti2_jll", "nauty_jll"]
+git-tree-sha1 = "bbfb3efdc5d77aad43e8939332801044b0fd243c"
 uuid = "c863536a-3901-11e9-33e7-d5cd0df7b904"
-version = "0.13.4"
+version = "0.15.3"
+weakdeps = ["Nemo"]
+
+    [deps.GAP.extensions]
+    NemoExt = "Nemo"
 
 [[deps.GAP_jll]]
 deps = ["Artifacts", "GMP_jll", "JLLWrappers", "Libdl", "Readline_jll", "Zlib_jll"]
-git-tree-sha1 = "4eb8eb4f144924b459a5dbee3fae219649a35175"
+git-tree-sha1 = "c7c71be92521dd2b6ea3aff04bffce1d9a417519"
 uuid = "5cd7a574-2c56-5be2-91dc-c8bc375b9ddf"
-version = "400.1400.5+2"
+version = "400.1401.5+0"
 
 [[deps.GAP_lib_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -148,9 +151,9 @@ version = "300.300.101+0"
 
 [[deps.GAP_pkg_browse_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "639d38bcf11685ce9aaa55fec366bcffed9edc0f"
+git-tree-sha1 = "136262f49a5aae3b0d2d5dd7a6acdf779d7c5b93"
 uuid = "6e540885-1cbc-538c-85e7-b800ca60d645"
-version = "100.800.2102+0"
+version = "100.800.2103+0"
 
 [[deps.GAP_pkg_caratinterface_jll]]
 deps = ["Artifacts", "GMP_jll", "JLLWrappers", "Libdl"]
@@ -160,9 +163,9 @@ version = "200.300.702+0"
 
 [[deps.GAP_pkg_cddinterface_jll]]
 deps = ["Artifacts", "GAP_jll", "GMP_jll", "JLLWrappers", "Libdl", "cddlib_jll"]
-git-tree-sha1 = "98d8889a24969bd16d8ef8bc86ba1c861c6b8fa3"
+git-tree-sha1 = "978aac20d74be2329e7e196f82d407c977455042"
 uuid = "edf6cd94-1a94-567d-837e-37d1f3b87eed"
-version = "202400.900.202+0"
+version = "202400.900.203+0"
 
 [[deps.GAP_pkg_cohomolo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -172,57 +175,57 @@ version = "100.600.1101+0"
 
 [[deps.GAP_pkg_crypting_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "0ef8c608fd16c07bd9ea12ff1ca9aed32c1b1cb7"
+git-tree-sha1 = "b3303f86f321296623ac97902fff877d9197c423"
 uuid = "3b5f52f3-99b5-593a-81cd-d6cf4b425c55"
-version = "0.1000.501+0"
+version = "0.1000.502+0"
 
 [[deps.GAP_pkg_curlinterface_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "LibCURL_jll", "Libdl"]
-git-tree-sha1 = "cb2bac3444e21dc3960d952b46ddf57eae58dbdc"
+git-tree-sha1 = "1f5cb9020586a251d193fd50b28069d627477a30"
 uuid = "deeb07ae-e8f4-5d6c-9f2a-02b0e630ae3b"
-version = "200.400.1+0"
+version = "200.400.2+0"
 
 [[deps.GAP_pkg_cvec_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "d1d274963936a44393b811d43a8c786309b3b6bf"
+git-tree-sha1 = "2dbab72ba64abac456d65706de8a38049e897b9c"
 uuid = "03de9d45-54dd-5e36-9810-6ca1d577e6b3"
-version = "200.800.201+0"
+version = "200.800.202+0"
 
 [[deps.GAP_pkg_datastructures_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "215e696be4dd0e689ef3d05872b6b2a55004d994"
+git-tree-sha1 = "5e9da47f92f06316e8e840259bc52b7c765957ec"
 uuid = "66bcec33-4fa3-551a-b2da-ca256b6829d9"
-version = "0.300.101+0"
+version = "0.300.102+0"
 
 [[deps.GAP_pkg_deepthought_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "68d73de7cd8f07aa44f96d92931f8ddb3c147fc4"
+git-tree-sha1 = "f50baff002323efb0662329c8092b71e5815b382"
 uuid = "27af9300-c9da-50fb-ba64-a6b0776a3078"
-version = "100.0.701+0"
+version = "100.0.702+0"
 
 [[deps.GAP_pkg_digraphs_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "504876610ecc880f633d63065142a685c51e21dd"
+git-tree-sha1 = "0b3688d48cf5fcf775d38e3e6124f14dc989e8a2"
 uuid = "ce5c30f6-a98c-53bc-b643-089f5717f8db"
-version = "100.900.1+0"
+version = "100.900.2+0"
 
 [[deps.GAP_pkg_edim_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "30d26208ce9c15321c001f97c542669ea430de17"
+git-tree-sha1 = "5d46098dc3e27a268fccb963d65ed778f4258b42"
 uuid = "aa0ab9cb-918b-5ca1-812e-3cecb1c413b6"
-version = "100.300.802+0"
+version = "100.300.803+0"
 
 [[deps.GAP_pkg_ferret_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "b1bc0f188e3196f6c0b0a5a9f1e4c9384d3beaae"
+git-tree-sha1 = "1b647b63e31f8eac7ea81d6d3e2c3bbbc1a112dc"
 uuid = "d6652ff9-bdf9-5f19-9e6f-c10727807222"
-version = "100.0.1401+0"
+version = "100.0.1402+0"
 
 [[deps.GAP_pkg_float_jll]]
 deps = ["Artifacts", "GAP_jll", "GMP_jll", "JLLWrappers", "Libdl", "MPC_jll", "MPFI_jll", "MPFR_jll"]
-git-tree-sha1 = "7c8e6aba3b8b2dc9c98f0c5ebb1b286424e77496"
+git-tree-sha1 = "161ebb54881d027b7f7f4b3e0b59b3db4c8af1e7"
 uuid = "b73cfdca-4c14-50a3-9408-5dcda5b8fad2"
-version = "100.0.501+0"
+version = "100.0.502+0"
 
 [[deps.GAP_pkg_fplsa_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -232,9 +235,9 @@ version = "100.200.601+0"
 
 [[deps.GAP_pkg_gauss_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "fa7ed224c129d56fb65e201d4e71e6122ac1b03e"
+git-tree-sha1 = "ee96c108fd8d2af5d8baae37a235f81b138d1f96"
 uuid = "296a3c51-2614-5f89-afa9-2c5cd84b74d9"
-version = "202400.1100.101+0"
+version = "202400.1100.102+0"
 
 [[deps.GAP_pkg_guava_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -244,21 +247,21 @@ version = "300.1900.1+0"
 
 [[deps.GAP_pkg_io_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "9719a0e4e21563ef1e12ed22e599257e9c305678"
+git-tree-sha1 = "0cc74480e4b103acc318c740b7cfb54ce6cd4fec"
 uuid = "19a9678b-966c-568e-9f2e-41ceac70c829"
-version = "400.900.101+0"
+version = "400.900.102+0"
 
 [[deps.GAP_pkg_json_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "cc238d98399bdcfeffda1162b440cb08069ef65b"
+git-tree-sha1 = "e3a17aeacbfc8d438b52bd906375bd72594c5d54"
 uuid = "b348cf08-4407-5d37-b307-1564396f8b07"
-version = "200.200.201+0"
+version = "200.200.202+0"
 
 [[deps.GAP_pkg_juliainterface_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "6bb34eb2b15dd88f5c42b68c830acd587bdd3e32"
+git-tree-sha1 = "0124b413866682e496b3e76fa528924600c670d6"
 uuid = "ba154793-3a7d-51ee-8800-e295b0cf7374"
-version = "0.1300.103+1"
+version = "0.1500.300+0"
 
 [[deps.GAP_pkg_kbmag_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -268,9 +271,9 @@ version = "100.500.1101+0"
 
 [[deps.GAP_pkg_normalizinterface_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl", "normaliz_jll"]
-git-tree-sha1 = "ba2ed5bbdefdf714f74455c15b6ac7b42b959756"
+git-tree-sha1 = "05b16655c10d76473595fff45d5376a82b207d25"
 uuid = "74f4ad05-5f81-5a78-8197-4e83b84c9c17"
-version = "100.300.703+0"
+version = "100.300.704+0"
 
 [[deps.GAP_pkg_nq_jll]]
 deps = ["Artifacts", "GMP_jll", "JLLWrappers", "Libdl"]
@@ -280,21 +283,21 @@ version = "200.500.1101+0"
 
 [[deps.GAP_pkg_orb_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "3b5bbb473dd9c2be84d4705187fe7b6dbbbe6c85"
+git-tree-sha1 = "95c4b65c9a5b39096e81a97aac303eb1d65de4c0"
 uuid = "b689cd95-dcfd-544e-a174-ce2fd787c795"
-version = "400.900.101+0"
+version = "400.900.102+0"
 
 [[deps.GAP_pkg_profiling_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "ca3526ac54052d0bed995834c1d3805e901c011b"
+git-tree-sha1 = "990f37fff95839846b1b6018f0ae51fb3165cf70"
 uuid = "d3697a66-ac8c-5833-932f-cdd896efbdde"
-version = "200.600.1+0"
+version = "200.600.2+0"
 
 [[deps.GAP_pkg_semigroups_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "37e84a26f08546777165898308e25e3714c68c50"
+git-tree-sha1 = "2141399309c4c83c8818b1584e29922844e0feb9"
 uuid = "6263fdc2-b0d3-58ac-9933-e1550bf6ed81"
-version = "500.400.2+0"
+version = "500.400.4+0"
 
 [[deps.GAP_pkg_simpcomp_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -304,9 +307,9 @@ version = "200.100.1401+0"
 
 [[deps.GAP_pkg_zeromqinterface_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl", "ZeroMQ_jll"]
-git-tree-sha1 = "288c17a9aba4d11d8b3ba2c85c43fea010d72bdc"
+git-tree-sha1 = "ec9ab10569bbfbbc801b518db0aea5ab52fe8c31"
 uuid = "abf7faeb-cafb-5034-8851-d0d251ebcfa3"
-version = "0.1600.1+0"
+version = "0.1600.2+0"
 
 [[deps.GLPK_jll]]
 deps = ["Artifacts", "GMP_jll", "JLLWrappers", "Libdl", "Pkg"]
@@ -320,10 +323,10 @@ uuid = "781609d7-10c4-51f6-84f2-b8444358ff6d"
 version = "6.3.0+0"
 
 [[deps.Hecke]]
-deps = ["AbstractAlgebra", "Dates", "Distributed", "FLINT_jll", "LazyArtifacts", "LinearAlgebra", "Markdown", "Nemo", "Pkg", "Printf", "Random", "RandomExtensions", "Serialization", "SparseArrays"]
-git-tree-sha1 = "f49c1d1e753e13b44f70f77519c37324c8485825"
+deps = ["AbstractAlgebra", "Artifacts", "Dates", "Distributed", "FLINT_jll", "LinearAlgebra", "Nemo", "Pkg", "Printf", "Random", "RandomExtensions", "SparseArrays"]
+git-tree-sha1 = "5758221d5c6c176b4781dbafe267bb056099d56b"
 uuid = "3e1990a7-5d81-5526-99ce-9ba3ff248f21"
-version = "0.36.3"
+version = "0.38.6"
 weakdeps = ["GAP", "Polymake"]
 
     [deps.Hecke.extensions]
@@ -460,10 +463,10 @@ uuid = "2ce0c516-f11f-5db3-98ad-e0e1048fbd70"
 version = "1.3.1+0"
 
 [[deps.MPFI_jll]]
-deps = ["Artifacts", "GMP_jll", "JLLWrappers", "Libdl", "MPFR_jll", "Pkg"]
-git-tree-sha1 = "e1986089e633dce1bc5b6a3ecd3502289854aab5"
+deps = ["Artifacts", "GMP_jll", "JLLWrappers", "Libdl", "MPFR_jll"]
+git-tree-sha1 = "250d1a35d37c2c2e0f72429f2bf172d684edff97"
 uuid = "e8b5fb6c-218f-5c08-bc3d-6b0e551bbffd"
-version = "1.5.5+0"
+version = "1.5.6+0"
 
 [[deps.MPFR_jll]]
 deps = ["Artifacts", "GMP_jll", "Libdl"]
@@ -503,9 +506,9 @@ version = "1.28.1+0"
 
 [[deps.Mongoc]]
 deps = ["Dates", "DecFP", "MongoC_jll", "Serialization"]
-git-tree-sha1 = "9b0ee6f5843a8df838d76794a5d50e77b8a3b08f"
+git-tree-sha1 = "7e6c6b2c69a5cf85860bb9d757b0420e0a37c68c"
 uuid = "4fe8b98c-fc19-5c23-8ec2-168ff83495f2"
-version = "0.9.2"
+version = "0.10.0"
 
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
@@ -518,10 +521,10 @@ uuid = "68e3532b-a499-55ff-9963-d1c0c0748b3a"
 version = "6.5.1+0"
 
 [[deps.Nemo]]
-deps = ["AbstractAlgebra", "FLINT_jll", "LinearAlgebra", "Random", "RandomExtensions", "SHA", "TOML"]
-git-tree-sha1 = "d48658057239f1749647649196f439ae8f34958d"
+deps = ["AbstractAlgebra", "FLINT_jll", "LinearAlgebra", "Random", "RandomExtensions", "SHA"]
+git-tree-sha1 = "774b72a7b1347d718e76f4c90653111c57b6a01a"
 uuid = "2edaba10-b0f1-5616-af89-8c11ac63239a"
-version = "0.50.4"
+version = "0.52.1"
 
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
@@ -551,9 +554,9 @@ version = "0.8.5+0"
 
 [[deps.OpenSSL_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "2ae7d4ddec2e13ad3bddf5c0796f7547cf682391"
+git-tree-sha1 = "f19301ae653233bc88b1810ae908194f07f8db9d"
 uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
-version = "3.5.2+0"
+version = "3.5.4+0"
 
 [[deps.OpenSpecFun_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl"]
@@ -563,9 +566,9 @@ version = "0.5.6+0"
 
 [[deps.Oscar]]
 deps = ["AbstractAlgebra", "AlgebraicSolving", "Compat", "Distributed", "GAP", "Hecke", "JSON", "JSON3", "LazyArtifacts", "Markdown", "Nemo", "Pkg", "Polymake", "ProgressMeter", "Random", "RandomExtensions", "Serialization", "Singular", "TOPCOM_jll", "UUIDs", "cohomCalg_jll", "lib4ti2_jll"]
-git-tree-sha1 = "416cd9cc9fa914890d503b1b730b58bd185addb0"
+git-tree-sha1 = "335c94fb23c26aca5555a20c24984c99593afd2b"
 uuid = "f1435218-dba5-11e9-1e4d-f1a5fab5fc13"
-version = "1.4.1"
+version = "1.5.0"
 
 [[deps.PPL_jll]]
 deps = ["Artifacts", "GMP_jll", "JLLWrappers", "Libdl", "Pkg"]
@@ -585,12 +588,6 @@ git-tree-sha1 = "7ab65a258bcf6da373cab49af462aead452d3960"
 uuid = "83958c19-0796-5285-893e-a1267f8ec499"
 version = "5.34.1+0"
 
-[[deps.Pidfile]]
-deps = ["FileWatching", "Test"]
-git-tree-sha1 = "2d8aaf8ee10df53d0dfb9b8ee44ae7c04ced2b03"
-uuid = "fa939f87-e72e-5be4-a000-7fc836dbe307"
-version = "1.3.0"
-
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "Random", "SHA", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
@@ -601,10 +598,16 @@ weakdeps = ["REPL"]
     REPLExt = "REPL"
 
 [[deps.Polymake]]
-deps = ["AbstractAlgebra", "BinaryWrappers", "CxxWrap", "Downloads", "JSON", "Libdl", "Mongoc", "NetworkOptions", "Ninja_jll", "Perl_jll", "Pidfile", "Pkg", "REPL", "Scratch", "SparseArrays", "TOPCOM_jll", "lib4ti2_jll", "libpolymake_julia_jll", "polymake_jll", "polymake_oscarnumber_jll"]
-git-tree-sha1 = "6c8e8effd1034900003edbe4bcd70a9e22b395da"
+deps = ["AbstractAlgebra", "BinaryWrappers", "CxxWrap", "FileWatching", "JSON", "Mongoc", "NetworkOptions", "Ninja_jll", "Perl_jll", "Pkg", "REPL", "Scratch", "SparseArrays", "TOPCOM_jll", "lib4ti2_jll", "libpolymake_julia_jll", "polymake_jll", "polymake_oscarnumber_jll"]
+git-tree-sha1 = "83a71eb90c33d31bd7cb4c89a0f972001299d009"
 uuid = "d720cf60-89b5-51f5-aff5-213f193123e7"
-version = "0.12.2"
+version = "0.13.2"
+
+    [deps.Polymake.extensions]
+    GraphvizExt = "Graphviz_jll"
+
+    [deps.Polymake.weakdeps]
+    Graphviz_jll = "3c863552-8265-54e4-a6dc-903eb78fde85"
 
 [[deps.PrecompileTools]]
 deps = ["Preferences"]
@@ -652,10 +655,10 @@ uuid = "05236dd9-4125-5232-aa7c-9ec0c9b2c25a"
 version = "8.2.13+0"
 
 [[deps.SCIP_jll]]
-deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "GMP_jll", "Ipopt_jll", "JLLWrappers", "Libdl", "Pkg", "Readline_jll", "Zlib_jll", "bliss_jll", "boost_jll"]
-git-tree-sha1 = "cf69186eb29307fbb2319b90e6133797bad983ce"
+deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "GMP_jll", "Ipopt_jll", "JLLWrappers", "Libdl", "Readline_jll", "Zlib_jll", "boost_jll"]
+git-tree-sha1 = "5630263485408eb84380cd9126e8d76159f08c66"
 uuid = "e5ac4fe4-a920-5659-9bf8-f9f73e9e79ce"
-version = "800.0.301+0"
+version = "900.200.200+0"
 
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
@@ -678,10 +681,10 @@ uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 version = "1.11.0"
 
 [[deps.Singular]]
-deps = ["AbstractAlgebra", "BinaryWrappers", "CxxWrap", "Libdl", "LinearAlgebra", "Nemo", "Pidfile", "Pkg", "Random", "RandomExtensions", "Singular_jll", "Statistics", "lib4ti2_jll", "libsingular_julia_jll"]
-git-tree-sha1 = "3b5adeb259a16710dd7aba97afe824838c3dd6b3"
+deps = ["AbstractAlgebra", "BinaryWrappers", "CxxWrap", "FileWatching", "Libdl", "LinearAlgebra", "Nemo", "Pkg", "Random", "RandomExtensions", "Singular_jll", "lib4ti2_jll", "libsingular_julia_jll"]
+git-tree-sha1 = "57c2a353c1d93b4834227aa68b2fac9a3f6a87c8"
 uuid = "bcd08a7b-43d2-5ff7-b6d4-c458787f915c"
-version = "0.25.7"
+version = "0.26.0"
 
 [[deps.Singular_jll]]
 deps = ["Artifacts", "FLINT_jll", "GMP_jll", "JLLWrappers", "Libdl", "MPFR_jll", "cddlib_jll"]
@@ -700,9 +703,9 @@ version = "1.11.0"
 
 [[deps.SpecialFunctions]]
 deps = ["IrrationalConstants", "LogExpFunctions", "OpenLibm_jll", "OpenSpecFun_jll"]
-git-tree-sha1 = "41852b8679f78c8d8961eeadc8f62cef861a52e3"
+git-tree-sha1 = "f2685b435df2613e25fc10ad8c26dddb8640f547"
 uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
-version = "2.5.1"
+version = "2.6.1"
 
     [deps.SpecialFunctions.extensions]
     SpecialFunctionsChainRulesCoreExt = "ChainRulesCore"
@@ -728,16 +731,6 @@ version = "1.9.15"
 git-tree-sha1 = "192954ef1208c7019899fbf8049e717f92959682"
 uuid = "1e83bf80-4336-4d27-bf5d-d5a4f845583c"
 version = "1.4.3"
-
-[[deps.Statistics]]
-deps = ["LinearAlgebra"]
-git-tree-sha1 = "ae3bb1eb3bba077cd276bc5cfc337cc65c3075c0"
-uuid = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
-version = "1.11.1"
-weakdeps = ["SparseArrays"]
-
-    [deps.Statistics.extensions]
-    SparseArraysExt = ["SparseArrays"]
 
 [[deps.StructTypes]]
 deps = ["Dates", "UUIDs"]
@@ -770,11 +763,6 @@ deps = ["ArgTools", "SHA"]
 uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
 version = "1.10.0"
 
-[[deps.Test]]
-deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
-uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-version = "1.11.0"
-
 [[deps.UUIDs]]
 deps = ["Random", "SHA"]
 uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
@@ -786,9 +774,9 @@ version = "1.11.0"
 
 [[deps.XML2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libiconv_jll", "Zlib_jll"]
-git-tree-sha1 = "b8b243e47228b4a3877f1dd6aee0c5d56db7fcf4"
+git-tree-sha1 = "80d3930c6347cfce7ccf96bd3bafdf079d9c0390"
 uuid = "02c8fc9c-b97f-50b9-bbe4-9be30ff0a78a"
-version = "2.13.6+1"
+version = "2.13.9+0"
 
 [[deps.Xorg_libpciaccess_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
@@ -820,10 +808,10 @@ uuid = "508c9074-7a14-5c94-9582-3d4bc1871065"
 version = "0.77.0+1"
 
 [[deps.boost_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
-git-tree-sha1 = "7a89efe0137720ca82f99e8daa526d23120d0d37"
+deps = ["Artifacts", "Bzip2_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
+git-tree-sha1 = "25fb6ecbb784a45f8ea74584fa631a9e85393dd0"
 uuid = "28df3c45-c428-5900-9ff8-a3135698ca75"
-version = "1.76.0+1"
+version = "1.87.0+0"
 
 [[deps.cddlib_jll]]
 deps = ["Artifacts", "GMP_jll", "JLLWrappers", "Libdl"]
@@ -856,15 +844,15 @@ version = "0.14.4+0"
 
 [[deps.libpolymake_julia_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "FLINT_jll", "JLLWrappers", "Libdl", "TOPCOM_jll", "lib4ti2_jll", "libcxxwrap_julia_jll", "polymake_jll"]
-git-tree-sha1 = "6b363552bc5bcb3dfa78c89f6fdbeee22ace4ddd"
+git-tree-sha1 = "21b95dd46f75f90474527ba38f9067ee2da32b65"
 uuid = "4d8266f6-2b3b-57e3-ad7a-d431eaaac945"
-version = "0.13.5+0"
+version = "0.14.2+0"
 
 [[deps.libsingular_julia_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Singular_jll", "libcxxwrap_julia_jll"]
-git-tree-sha1 = "0a7756b617da0cee8a05b5336b4e91f4f231d59f"
+git-tree-sha1 = "e01a390945aac68ef140202745c5b9bf19bc09f8"
 uuid = "ae4fbd8f-ecdb-54f8-bbce-35570499b30e"
-version = "0.47.5+1"
+version = "0.47.6+0"
 
 [[deps.libsodium_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -908,15 +896,15 @@ version = "17.4.0+2"
 
 [[deps.polymake_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "FLINT_jll", "GMP_jll", "JLLWrappers", "LLVMOpenMP_jll", "Libdl", "MPFR_jll", "MongoC_jll", "PPL_jll", "Perl_jll", "SCIP_jll", "bliss_jll", "boost_jll", "cddlib_jll", "lrslib_jll", "normaliz_jll"]
-git-tree-sha1 = "5cc7268a56ea011bb03877b720071c99c66e0f1b"
+git-tree-sha1 = "9cce20f863fbc671f47fdafc1979326f4a0db797"
 uuid = "7c209550-9012-526c-9264-55ba7a78ba2c"
-version = "400.1300.4+0"
+version = "400.1500.0+0"
 
 [[deps.polymake_oscarnumber_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "LLVMOpenMP_jll", "Libdl", "libcxxwrap_julia_jll", "libpolymake_julia_jll", "polymake_jll"]
-git-tree-sha1 = "8de08ed3f18f4e4abc6358dcb3834e19e5de7570"
+git-tree-sha1 = "f0e88262065bf55f0dc0eb885a32317bb39b13fe"
 uuid = "10f31823-b687-53e6-9f29-edb9d4da9f9f"
-version = "0.3.8+0"
+version = "0.3.11+0"
 
 [[deps.snappy_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]

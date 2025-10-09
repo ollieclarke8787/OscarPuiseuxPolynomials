@@ -1,7 +1,17 @@
 name = "OscarPuiseuxPolynomial"
-uuid = "208f2d51-8b9c-406a-8887-66ece6d8731d"
-authors = ["Oliver Clarke <oliver.clarke@durham.ac.uk>", "Yue Ren <yue.ren2@durham.ac.uk>"]
-version = "0.1.0"
+uuid = "7e8d91a7-ef99-4171-8ecc-0b23a9b9da6d"
+authors = ["Oliver Clarke <oliver.clarke.crgs@gmail.com>"]
+version = "1.0.0-DEV"
 
 [deps]
 Oscar = "f1435218-dba5-11e9-1e4d-f1a5fab5fc13"
+
+[compat]
+Oscar = "1.5.0"
+julia = "1.6.7"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
