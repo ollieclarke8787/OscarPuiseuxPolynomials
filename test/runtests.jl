@@ -1,6 +1,6 @@
-using OscarPuiseuxPolynomials
+using OscarPuiseuxPolynomial
 using Test
 
-@testset "OscarPuiseuxPolynomials.jl" begin
+@testset "OscarPuiseuxPolynomial.jl" begin
     # Write your tests here.
 end
