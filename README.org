@@ -1,5 +1,7 @@
 * OscarPuiseuxPolynomials.jl
 
+[![codecov]https://app.codecov.io/github/ollieclarke8787/OscarPuiseuxPolynomials/branch/main/graph/badge.svg)](https://app.codecov.io/github/ollieclarke8787/OscarPuiseuxPolynomials)
+
 ** Introduction
 This software package contains implements sparse univariate Puiseux polynomials
 for the computer algebra system [[https://www.oscar-system.org/][OSCAR]].
