@@ -98,16 +98,6 @@ scale(f::MPuiseuxPolyRingElem) = f.scale
 
 #################################################################################
 #
-# Properties
-#
-#################################################################################
-
-nvars(R::MPuiseuxPolyRing) = nvars(underlying_polynomial_ring(R))
-coefficients(f::MPuiseuxPolyRingElem) = coefficients(poly(f))
-exponents(f::MPuiseuxPolyRingElem) = Vector{QQFieldElem}.(exponents(poly(f))) .// scale(f)
-
-#################################################################################
-#
 # Setters
 #
 #################################################################################
@@ -201,6 +191,7 @@ function hash(f::MPuiseuxPolyRingElem, h::UInt)
 end
 
 gens(R::MPuiseuxPolyRing) = puiseux_polynomial_ring_elem.(Ref(R), gens(underlying_polynomial_ring(R)))
+nvars(R::MPuiseuxPolyRing) = nvars(underlying_polynomial_ring(R))
 zero(R::MPuiseuxPolyRing) = puiseux_polynomial_ring_elem(R, zero(underlying_polynomial_ring(R)); skip_normalization=true)
 one(R::MPuiseuxPolyRing) = puiseux_polynomial_ring_elem(R, one(underlying_polynomial_ring(R)); skip_normalization=true)
 iszero(f::MPuiseuxPolyRingElem) = iszero(poly(f))
