@@ -1,5 +1,9 @@
 using Revise, Oscar, OscarPuiseuxPolynomial
 
+Kp, (tp1,tp2,tp3) = puiseux_polynomial_ring(QQ,["t1","t2","t3"])
+a = tp2^(3//3)
+b = tp1^(1//2)
+
 R,(x,y) = polynomial_ring(QQ, [:x,:y])
 f = x^2 + x*y
 

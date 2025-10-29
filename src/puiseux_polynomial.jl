@@ -350,13 +350,40 @@ function ^(f::MPuiseuxPolyRingElem, a::QQFieldElem)
         parent(f),
         poly(f),
         shift(f)*numerator(a),
-        scale(f)*denominator(a);
-        skip_normalization=true
+        scale(f)*denominator(a)
     )
 end
 
 function ^(f::MPuiseuxPolyRingElem, a::Rational{Int})
     return f^(QQ(a))
+end
+
+function ^(f::MPuiseuxPolyRingElem, a::ZZRingElem)
+    if a == 0
+        return one(parent(f))
+    end
+    if a == 1
+        return f
+    end
+
+    if a < 0
+        # test whether f is a monomial
+        @assert length(f) == 1 "only monomials can be exponentiated to negative powers"
+        R = parent(f)
+        c = first(coefficients(f))
+        return puiseux_polynomial_ring_elem(
+            R,
+            R(c^a),
+            shift(f)*a,
+            scale(f)
+        )
+    end
+
+    return reduce(*, [ f for i in 1:a ])
+end
+
+function ^(f::MPuiseuxPolyRingElem, a::Int)
+    return f^(ZZ(a))
 end
 
 function //(f::MPuiseuxPolyRingElem{K}, a::K) where K <: FieldElement
