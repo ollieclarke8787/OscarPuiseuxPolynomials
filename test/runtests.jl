@@ -70,6 +70,8 @@ using Oscar
         @test OscarPuiseuxPolynomial.poly(g) == t1^3 + t3^2
         @test OscarPuiseuxPolynomial.scale(g) == 6
         @test OscarPuiseuxPolynomial.shift(g) == [0,0,0]
+
+
         
         g = tp1^(2//3)*tp1*tp2^(1//2)*tp3 + tp3^(3//7)*tp1*tp2^(1//2)*tp3 + tp2^(1//2)*tp1*tp2^(1//2)*tp3
         @test OscarPuiseuxPolynomial.parent(g) == Kp
@@ -94,6 +96,7 @@ using Oscar
 
         @test (u^(1//2)+u^(-1//2))^2 == u+2+u^(-1)
    end
+
 end
 
 
