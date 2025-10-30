@@ -1,5 +1,11 @@
 using Revise, Oscar, OscarPuiseuxPolynomial
 
+K, (u,v,w) = puiseux_polynomial_ring(QQ,["u","v","w"])
+f = u^(1//2)*v^(2//3) + w^(1//4)
+g = u^(2//3)
+gh = g*h
+
+
 Kp, (tp1,tp2,tp3) = puiseux_polynomial_ring(QQ,["t1","t2","t3"])
 a = tp2^(3//3)
 b = tp1^(1//2)

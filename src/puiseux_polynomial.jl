@@ -324,7 +324,8 @@ function *(f::MPuiseuxPolyRingElem, g::MPuiseuxPolyRingElem)
     # add shifts, multiply scales and polys
     newShift = shift(f)*scale(g) + shift(g)*scale(f)
     newScale = scale(f)*scale(g)
-    newPoly = poly(f)*poly(g)
+    xPrimes = gens(parent(poly(f)))
+    newPoly = evaluate(poly(f),xPrimes .^ scale(g))*evaluate(poly(g),xPrimes .^ scale(f))
 
     return puiseux_polynomial_ring_elem(parent(f), newPoly, newShift, newScale)
 end
