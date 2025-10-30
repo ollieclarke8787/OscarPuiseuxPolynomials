@@ -69,6 +69,7 @@ using Oscar
         @test OscarPuiseuxPolynomial.parent(g) == Kp
         @test OscarPuiseuxPolynomial.poly(g) == t1^3 + t3^2
         @test OscarPuiseuxPolynomial.scale(g) == 6
+
         @test OscarPuiseuxPolynomial.shift(g) == [0,0,0]
         
         g = tp1^(2//3)*tp1*tp2^(1//2)*tp3 + tp3^(3//7)*tp1*tp2^(1//2)*tp3 + tp2^(1//2)*tp1*tp2^(1//2)*tp3
@@ -79,6 +80,7 @@ using Oscar
     end
 
     @testset "Arithmetic" begin
+
         K, (u,v,w) = puiseux_polynomial_ring(QQ,["u","v","w"])
         g = u + v
         h = v + w
@@ -87,7 +89,7 @@ using Oscar
         @test h-g == w-u
         @test h*g == u*v + u*w + v^2 + v*w
         @test (g)^3 == u^3 + 3*u^2*v + 3*u*v^2 + v^3
-        
+
         g = u^(1//2)*v^(2//3) + w^(1//4)
         h = u^(2//3)
         @test g*h == u^(7//6)*v^(2//3)+w^(1//4)*u^(2//3)
