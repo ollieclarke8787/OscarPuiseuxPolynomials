@@ -5,6 +5,7 @@ f = u^(1//2)*v^(2//3) + w^(1//4)
 g = u^(2//3)
 gh = g*h
 
+u^(-1)
 
 Kp, (tp1,tp2,tp3) = puiseux_polynomial_ring(QQ,["t1","t2","t3"])
 a = tp2^(3//3)

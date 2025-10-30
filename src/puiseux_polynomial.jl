@@ -363,10 +363,11 @@ function ^(f::MPuiseuxPolyRingElem, a::ZZRingElem)
         # test whether f is a monomial
         @assert length(f) == 1 "only monomials can be exponentiated to negative powers"
         R = parent(f)
+        Runder = underlying_polynomial_ring(R)
         c = first(coefficients(f))
         return puiseux_polynomial_ring_elem(
             R,
-            R(c^a),
+            Runder(c^a),
             shift(f)*a,
             scale(f)
         )
