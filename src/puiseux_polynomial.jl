@@ -252,7 +252,7 @@ function Base.show(io::IO, f::MPuiseuxPolyRingElem)
                     continue
                 elseif isone(ei)
                     monomialString *= "*" * string(ti)
-                elseif denominator(ei) == 1
+                elseif denominator(ei) == 1 && numerator(ei) > 0
                     monomialString *= "*" * string(ti) * "^" * string(numerator(ei))
                 else
                     monomialString *= "*" * string(ti) * "^(" * string(ei) * ")"
