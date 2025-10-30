@@ -80,7 +80,6 @@ using Oscar
 
     @testset "Arithmetic" begin
         K, (u,v,w) = puiseux_polynomial_ring(QQ,["u","v","w"])
-
         g = u + v
         h = v + w
         @test 4*g == 4*u + 4*v
@@ -92,9 +91,9 @@ using Oscar
         g = u^(1//2)*v^(2//3) + w^(1//4)
         h = u^(2//3)
         @test g*h == u^(7//6)*v^(2//3)+w^(1//4)*u^(2//3)
-        
+
         @test (u^(1//2)+u^(-1//2))^2 == u+2+u^(-1)
-    end
+   end
 end
 
 
