@@ -1,4 +1,13 @@
-using Revise, Oscar, OscarPuiseuxPolynomial
+using Revise
+using OscarPuiseuxPolynomial
+using Oscar
+
+
+K, (t,) = puiseux_polynomial_ring(QQ, ["t"])
+nu = tropical_semiring_map(K,t,max)
+nu(t)
+initial(t,nu)
+
 
 K, (u,v,w) = puiseux_polynomial_ring(QQ,["u","v","w"])
 f = u^(1//2)*v^(2//3) + w^(1//4)
