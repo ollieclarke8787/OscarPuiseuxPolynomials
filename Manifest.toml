@@ -127,9 +127,9 @@ weakdeps = ["Nemo"]
 
 [[deps.GAP_jll]]
 deps = ["Artifacts", "GMP_jll", "JLLWrappers", "Libdl", "Readline_jll", "Zlib_jll"]
-git-tree-sha1 = "d2290d76dfa30a101d27a0766ca55df854e0b812"
+git-tree-sha1 = "0cce2b1bc18c45957d5bf775988b4aea588d6ad5"
 uuid = "5cd7a574-2c56-5be2-91dc-c8bc375b9ddf"
-version = "400.1500.100+0"
+version = "400.1500.100+1"
 
 [[deps.GAP_lib_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -259,9 +259,9 @@ version = "201.20300.0+0"
 
 [[deps.GAP_pkg_juliainterface_jll]]
 deps = ["Artifacts", "GAP_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "c26c251942ed90cf8df9c417f7d4e1e0fb547a8c"
+git-tree-sha1 = "1061a3cb62bf7b78c247bf64bb86b50bbc21406b"
 uuid = "ba154793-3a7d-51ee-8800-e295b0cf7374"
-version = "0.160000.0+0"
+version = "0.160000.0+1"
 
 [[deps.GAP_pkg_kbmag_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -571,7 +571,7 @@ version = "0.5.6+0"
 
 [[deps.Oscar]]
 deps = ["AbstractAlgebra", "AlgebraicSolving", "Compat", "Distributed", "GAP", "Hecke", "JSON", "JSON3", "LazyArtifacts", "Markdown", "Mongoc", "Nemo", "NetworkOptions", "Pkg", "Polymake", "ProgressMeter", "Random", "RandomExtensions", "Serialization", "Singular", "TOPCOM_jll", "UUIDs", "cohomCalg_jll", "f4ncgb_jll", "lib4ti2_jll"]
-git-tree-sha1 = "6b433db29a2f24a304407728fc237e6be7832325"
+git-tree-sha1 = "f70cdabbf0e9a424ce1070a2e602cfb34b2c41ad"
 repo-rev = "yr/TropicalSemiringMap"
 repo-url = "https://github.com/YueRen/Oscar.jl.git"
 uuid = "f1435218-dba5-11e9-1e4d-f1a5fab5fc13"
@@ -877,9 +877,9 @@ version = "0.14.5+0"
 
 [[deps.libpolymake_julia_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "FLINT_jll", "JLLWrappers", "Libdl", "TOPCOM_jll", "lib4ti2_jll", "libcxxwrap_julia_jll", "polymake_jll"]
-git-tree-sha1 = "21b95dd46f75f90474527ba38f9067ee2da32b65"
+git-tree-sha1 = "3994d78f66ac8c71b58eb7f48584f8d4822d3387"
 uuid = "4d8266f6-2b3b-57e3-ad7a-d431eaaac945"
-version = "0.14.2+0"
+version = "0.14.3+0"
 
 [[deps.libsingular_julia_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Singular_jll", "libcxxwrap_julia_jll"]
@@ -935,9 +935,9 @@ version = "400.1500.0+0"
 
 [[deps.polymake_oscarnumber_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "LLVMOpenMP_jll", "Libdl", "libcxxwrap_julia_jll", "libpolymake_julia_jll", "polymake_jll"]
-git-tree-sha1 = "f0e88262065bf55f0dc0eb885a32317bb39b13fe"
+git-tree-sha1 = "54e9e9555bab82c8c9d268805f3b144db9cfd575"
 uuid = "10f31823-b687-53e6-9f29-edb9d4da9f9f"
-version = "0.3.11+0"
+version = "0.3.12+0"
 
 [[deps.snappy_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
