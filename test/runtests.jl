@@ -75,7 +75,6 @@ using Oscar
         @test OscarPuiseuxPolynomial.scale(g) == 6
         @test OscarPuiseuxPolynomial.shift(g) == [0,0,0]
 
-
         
         g = tp1^(2//3)*tp1*tp2^(1//2)*tp3 + tp3^(3//7)*tp1*tp2^(1//2)*tp3 + tp2^(1//2)*tp1*tp2^(1//2)*tp3
         @test OscarPuiseuxPolynomial.parent(g) == Kp
