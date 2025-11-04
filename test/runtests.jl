@@ -128,7 +128,7 @@ using Oscar
         @test OscarPuiseuxPolynomial.scale(g_c) == 10
         @test OscarPuiseuxPolynomial.poly(g_c) == 1+up^10*vp^10*wp^10
         @test OscarPuiseuxPolynomial.shift(g_c) == [ZZ(15),ZZ(25),ZZ(35)]
-        @test collect(exponents(g)) = [[5//2,7//2,9//2],[3//2,5//2,7//2]]
+        @test collect(exponents(g)) == [[5//2,7//2,9//2],[3//2,5//2,7//2]]
         @test normalize!(K(0)) == false
     end
 
