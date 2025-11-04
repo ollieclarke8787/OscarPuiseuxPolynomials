@@ -64,14 +64,11 @@ using Oscar
 	    @test K == OscarPuiseuxPolynomial.underlying_polynomial_ring(Kp)
         @test QQ == OscarPuiseuxPolynomial.base_ring(Kp)
         @test QQ == OscarPuiseuxPolynomial.coefficient_ring(Kp)
-        # TODO
-        # @test OscarPuiseuxPolynomial.ngens(Kp) == 3
-        # 
+        @test OscarPuiseuxPolynomial.ngens(Kp) == 3
         @test OscarPuiseuxPolynomial.gens(Kp) == [tp1,tp2,tp3]
         
         g = tp1^(1//2)+tp3^(1//3)
 
-        @test OscarPuiseuxPolynomial.ngens(g) == 3
         @test OscarPuiseuxPolynomial.parent(g) == Kp
         @test OscarPuiseuxPolynomial.poly(g) == t1^3 + t3^2
         @test OscarPuiseuxPolynomial.scale(g) == 6
