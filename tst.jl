@@ -1,4 +1,27 @@
-using Revise, Oscar, OscarPuiseuxPolynomial
+using Revise
+using OscarPuiseuxPolynomial
+using Oscar
+
+R,(x,y) = polynomial_ring(QQ, [:x,:y])
+f = x^2 + x*y
+nu = tropical_semiring_map(QQ,2,max)
+initial(f,nu,[0,0])
+has_attribute(R, :tropical_geometry_polynomial_rings_for_initial)
+
+
+K, (t,) = puiseux_polynomial_ring(QQ, ["t"])
+nu = tropical_semiring_map(K,t,max)
+nu(t)
+initial(t,nu)
+
+R,(x,y) = K["x","y"]
+f = x + y + t
+OscarPuiseuxPolynomial.tropical_hypersurface_over_fraction_field(f,nu)
+
+
+initial(f,nu,[1,1])
+has_attribute(R, :tropical_geometry_polynomial_rings_for_initial)
+
 
 K, (u,v,w) = puiseux_polynomial_ring(QQ,["u","v","w"])
 f = u^(1//2)*v^(2//3) + w^(1//4)
@@ -10,9 +33,6 @@ u^(-1)
 Kp, (tp1,tp2,tp3) = puiseux_polynomial_ring(QQ,["t1","t2","t3"])
 a = tp2^(3//3)
 b = tp1^(1//2)
-
-R,(x,y) = polynomial_ring(QQ, [:x,:y])
-f = x^2 + x*y
 
 Kt, (t1,t2) = puiseux_polynomial_ring(QQ, ["t1","t2"])
 monomials(t1+t1^(2//4)*t2^2)
