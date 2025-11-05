@@ -61,6 +61,7 @@ using Oscar
         K, (t1,t2,t3) = polynomial_ring(QQ, ["t1","t2","t3"])
         Kp, (tp1,tp2,tp3) = puiseux_polynomial_ring(QQ,["t1","t2","t3"])
 
+
 	    @test K == OscarPuiseuxPolynomial.underlying_polynomial_ring(Kp)
         @test QQ == OscarPuiseuxPolynomial.base_ring(Kp)
         @test QQ == OscarPuiseuxPolynomial.coefficient_ring(Kp)
@@ -68,24 +69,32 @@ using Oscar
         @test OscarPuiseuxPolynomial.gens(Kp) == [tp1,tp2,tp3]
         
         g = tp1^(1//2)+tp3^(1//3)
-
+        @test OscarPuiseuxPolynomial.elem_type(Kp) == typeof(g)
+        @test OscarPuiseuxPolynomial.parent_type(g) == typeof(Kp)
+        @test OscarPuiseuxPolynomial.base_ring_type(Kp) == typeof(QQ)
+        @test OscarPuiseuxPolynomial.ngens(g) == 3
         @test OscarPuiseuxPolynomial.parent(g) == Kp
         @test OscarPuiseuxPolynomial.poly(g) == t1^3 + t3^2
         @test OscarPuiseuxPolynomial.scale(g) == 6
         @test OscarPuiseuxPolynomial.shift(g) == [0,0,0]
 
-        
         g = tp1^(2//3)*tp1*tp2^(1//2)*tp3 + tp3^(3//7)*tp1*tp2^(1//2)*tp3 + tp2^(1//2)*tp1*tp2^(1//2)*tp3
         @test OscarPuiseuxPolynomial.parent(g) == Kp
         @test OscarPuiseuxPolynomial.poly(g) == t1^28 + t2^21 + t3^18
         @test OscarPuiseuxPolynomial.shift(g) == [42,21,42]
         @test OscarPuiseuxPolynomial.scale(g) == 2*3*7
+
+        
+        K, (t,) = puiseux_polynomial_ring(QQ,["t"])
+        @test valuation(K(0)) == PosInf()
+        @test valuation(t^(-1)) == -1
+        @test valuation(t^(-2//3)+t^(-1//2)) == -2//3
+        @test_throws AssertionError valuation(g)
     end
 
     @testset "Arithmetic" begin
         F, (up,vp,wp) = polynomial_ring(QQ,["u","v","w"])
         K, (u,v,w) = puiseux_polynomial_ring(QQ,["u","v","w"])
-
         g = v^(1//3)+u^(1//2)
         h = v^(1//3) + w^(1//3)
 
@@ -127,7 +136,7 @@ using Oscar
         @test OscarPuiseuxPolynomial.scale(g_c) == 10
         @test OscarPuiseuxPolynomial.poly(g_c) == 1+up^10*vp^10*wp^10
         @test OscarPuiseuxPolynomial.shift(g_c) == [ZZ(15),ZZ(25),ZZ(35)]
-        @test collect(exponents(g)) == [[5//2,7//2,9//2],[3//2,5//2,7//2]]
+        @test collect(exponents(g_c)) == [[5//2,7//2,9//2],[3//2,5//2,7//2]]
         @test normalize!(K(0)) == false
     end
 
@@ -142,4 +151,3 @@ using Oscar
         @test K(1) == one(K)
     end
 end
-
