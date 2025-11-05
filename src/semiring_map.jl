@@ -68,5 +68,6 @@ end
 function initial(c::MPuiseuxPolyRingElem, nu::TropicalSemiringMap{<:MPuiseuxPolyRing,<:MPuiseuxPolyRingElem,MinOrMax}) where MinOrMax<:Union{typeof(min),typeof(max)}
     # return residue field zero if c is zero and the correct non-zero residue otherwise
     iszero(c) && return zero(residue_field(nu))
-    return first(coefficients(c))
+    C = collect(coefficients(c))
+    return last(C)
 end
