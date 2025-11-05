@@ -2,13 +2,6 @@ using Revise
 using OscarPuiseuxPolynomial
 using Oscar
 
-R,(x,y) = polynomial_ring(QQ, [:x,:y])
-f = x^2 + x*y
-nu = tropical_semiring_map(QQ,2,max)
-initial(f,nu,[0,0])
-has_attribute(R, :tropical_geometry_polynomial_rings_for_initial)
-
-
 K, (t,) = puiseux_polynomial_ring(QQ, ["t"])
 nu = tropical_semiring_map(K,t,max)
 nu(t)
@@ -17,7 +10,8 @@ initial(t,nu)
 R,(x,y) = K["x","y"]
 f = x + y + t
 OscarPuiseuxPolynomial.tropical_hypersurface_over_fraction_field(f,nu)
-
+tropical_polynomial(f,nu)
+tropical_hypersurface(ans)
 
 initial(f,nu,[1,1])
 has_attribute(R, :tropical_geometry_polynomial_rings_for_initial)
