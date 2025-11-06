@@ -156,6 +156,10 @@ end
 #
 #################################################################################
 
+function (Kt::MPuiseuxPolyRing)()
+    return zero(Kt)
+end
+
 function (Kt::MPuiseuxPolyRing)(c::Int)
     return MPuiseuxPolyRingElem(Kt,underlying_polynomial_ring(Kt)(c))
 end
