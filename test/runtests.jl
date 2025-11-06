@@ -64,36 +64,89 @@ using Oscar
 	    @test K == OscarPuiseuxPolynomial.underlying_polynomial_ring(Kp)
         @test QQ == OscarPuiseuxPolynomial.base_ring(Kp)
         @test QQ == OscarPuiseuxPolynomial.coefficient_ring(Kp)
-
+        @test OscarPuiseuxPolynomial.ngens(Kp) == 3
+        @test OscarPuiseuxPolynomial.gens(Kp) == [tp1,tp2,tp3]
+        
         g = tp1^(1//2)+tp3^(1//3)
+        @test OscarPuiseuxPolynomial.elem_type(Kp) == typeof(g)
+        @test OscarPuiseuxPolynomial.parent_type(g) == typeof(Kp)
+        @test OscarPuiseuxPolynomial.base_ring_type(Kp) == typeof(QQ)
         @test OscarPuiseuxPolynomial.parent(g) == Kp
         @test OscarPuiseuxPolynomial.poly(g) == t1^3 + t3^2
         @test OscarPuiseuxPolynomial.scale(g) == 6
         @test OscarPuiseuxPolynomial.shift(g) == [0,0,0]
-        
+
         g = tp1^(2//3)*tp1*tp2^(1//2)*tp3 + tp3^(3//7)*tp1*tp2^(1//2)*tp3 + tp2^(1//2)*tp1*tp2^(1//2)*tp3
         @test OscarPuiseuxPolynomial.parent(g) == Kp
         @test OscarPuiseuxPolynomial.poly(g) == t1^28 + t2^21 + t3^18
         @test OscarPuiseuxPolynomial.shift(g) == [42,21,42]
         @test OscarPuiseuxPolynomial.scale(g) == 2*3*7
+
+        
+        K, (t,) = puiseux_polynomial_ring(QQ,["t"])
+        @test valuation(K(0)) == PosInf()
+        @test valuation(t^(-1)) == -1
+        @test valuation(t^(-2//3)+t^(-1//2)) == -2//3
+        @test_throws AssertionError valuation(g)
     end
 
     @testset "Arithmetic" begin
+
+        F, (up,vp,wp) = polynomial_ring(QQ,["u","v","w"])
         K, (u,v,w) = puiseux_polynomial_ring(QQ,["u","v","w"])
-        g = u + v
-        h = v + w
-        @test 4*g == 4*u + 4*v
-        @test h+g == u + 2*v + w
-        @test h-g == w-u
-        @test h*g == u*v + u*w + v^2 + v*w
-        @test (g)^3 == u^3 + 3*u^2*v + 3*u*v^2 + v^3
-        
+        g = v^(1//3)+u^(1//2)
+        h = v^(1//3) + w^(1//3)
+
+        @test monomials(g) == [u^(1//2),v^(1//3)]
+        @test monomials(h) == [v^(1//3),w^(1//3)]
+        @test collect(coefficients(g)) == [1,1]
+        @test collect(coefficients(h)) == [1,1]
+        @test collect(exponents(g)) == [[QQ(1//2),QQ(0),QQ(0)],[QQ(0),QQ(1//3),QQ(0)]]
+        @test 0*g == 0
+        @test 1*g == g
+        @test g*1 == g
+        @test 4*g == 4*u^(1//2) + 4*v^(1//3)
+        @test g+0 == g
+        @test 0+g == g
+        @test h+g == u^(1//2) + 2*v^(1//3) + w^(1//3)
+        @test h-g == w^(1//3)-u^(1//2)
+        @test h*g == u^(1//2)*v^(1//3) + u^(1//2)*w^(1//3) + v^(2//3) + v^(1//3)*w^(1//3)
+        @test (g)^3 == u^(3//2) + 3*u*v^(1//3) + 3*u^(1//2)*v^(2//3) + v
+        @test (g)^1 == g
+        @test (g)^0 == 1
+        @test g//(2) == (1//2)*u^(1//2) + (1//2)*v^(1//3)
+
         g = u^(1//2)*v^(2//3) + w^(1//4)
         h = u^(2//3)
         @test g*h == u^(7//6)*v^(2//3)+w^(1//4)*u^(2//3)
 
         @test (u^(1//2)+u^(-1//2))^2 == u+2+u^(-1)
-   end
+
+        g = puiseux_polynomial_ring_elem(K,up*vp*wp*((up^4)*(vp^4)*(wp^4)+1),[ZZ(5),ZZ(9),ZZ(13)],ZZ(4),skip_normalization=true)
+        @test monomials(g) == [u^(5//2)*v^(7//2)*w^(9//2),u^(3//2)*v^(5//2)*w^(7//2)]
+        @test collect(exponents(g)) == [[5//2,7//2,9//2],[3//2,5//2,7//2]]
+        @test OscarPuiseuxPolynomial.poly(g) == up*vp*wp*(up^4*vp^4*wp^4+1)
+        @test OscarPuiseuxPolynomial.scale(g) == 4
+        @test OscarPuiseuxPolynomial.shift(g) == [ZZ(5),ZZ(9),ZZ(13)]
+        @test normalize!(g) == true
+        @test OscarPuiseuxPolynomial.poly(g) == 1+up^2*vp^2*wp^2
+        @test OscarPuiseuxPolynomial.scale(g) == 2
+        g_c = OscarPuiseuxPolynomial.rescale(g,ZZ(10))
+        @test OscarPuiseuxPolynomial.scale(g_c) == 10
+        @test OscarPuiseuxPolynomial.poly(g_c) == 1+up^10*vp^10*wp^10
+        @test OscarPuiseuxPolynomial.shift(g_c) == [ZZ(15),ZZ(25),ZZ(35)]
+        @test collect(exponents(g_c)) == [[5//2,7//2,9//2],[3//2,5//2,7//2]]
+        @test normalize!(K(0)) == false
+    end
+
+    @testset "Conversions" begin
+        F, (up,vp,wp) = polynomial_ring(QQ,["u","v","w"])
+        K, (u,v,w) = puiseux_polynomial_ring(QQ,["u","v","w"])
+        @test typeof(3) == Int64
+        @test K(3) == puiseux_polynomial_ring_elem(K,F(3))
+        @test typeof(4//5) == Rational{Int64}
+        @test K(4//5) == puiseux_polynomial_ring_elem(K,F(4//5))
+        @test K(0) == zero(K)
+        @test K(1) == one(K)
+    end
 end
-
-
