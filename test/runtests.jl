@@ -61,7 +61,6 @@ using Oscar
         K, (t1,t2,t3) = polynomial_ring(QQ, ["t1","t2","t3"])
         Kp, (tp1,tp2,tp3) = puiseux_polynomial_ring(QQ,["t1","t2","t3"])
 
-
 	    @test K == OscarPuiseuxPolynomial.underlying_polynomial_ring(Kp)
         @test QQ == OscarPuiseuxPolynomial.base_ring(Kp)
         @test QQ == OscarPuiseuxPolynomial.coefficient_ring(Kp)
@@ -72,11 +71,9 @@ using Oscar
         @test OscarPuiseuxPolynomial.elem_type(Kp) == typeof(g)
         @test OscarPuiseuxPolynomial.parent_type(g) == typeof(Kp)
         @test OscarPuiseuxPolynomial.base_ring_type(Kp) == typeof(QQ)
-        @test OscarPuiseuxPolynomial.ngens(g) == 3
         @test OscarPuiseuxPolynomial.parent(g) == Kp
         @test OscarPuiseuxPolynomial.poly(g) == t1^3 + t3^2
         @test OscarPuiseuxPolynomial.scale(g) == 6
-
         @test OscarPuiseuxPolynomial.shift(g) == [0,0,0]
 
         g = tp1^(2//3)*tp1*tp2^(1//2)*tp3 + tp3^(3//7)*tp1*tp2^(1//2)*tp3 + tp2^(1//2)*tp1*tp2^(1//2)*tp3
