@@ -13,9 +13,9 @@ $$ K\{t\} = \left\{ {\sum}_ {k=k_0} ^ {k_1} c_ {k/d} t^ {k/d} \mid d\in\mathbb{Z
 This package is meant to be used in conjunction with OSCAR and should
 interoperate with many features in OSCAR, such as
 
-+ working with matrices over $K\{t\}$,
-+ working with polynomials over $K\{t\}$,
-+ using $K\{t\}$ as codomain for tropical semiring maps.
++ working with OSCAR matrices over $K\{t\}$,
++ working with OSCAR polynomials over $K\{t\}$,
++ using $K\{t\}$ as domain for tropical semiring maps.
 
 ** Similar Packages
 
