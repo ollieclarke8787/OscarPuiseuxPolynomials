@@ -223,6 +223,14 @@ function valuation(f::MPuiseuxPolyRingElem)
     return first(shift(f)) // scale(f)
 end
 
+function initial(f::MPuiseuxPolyRingElem)
+    if iszero(f)
+        return zero(base_ring(parent(f)))
+    end
+    C = collect(coefficients(f))
+    return last(C)
+end
+
 
 #################################################################################
 #
