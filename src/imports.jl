@@ -5,6 +5,7 @@ import Base:
     //,
     ==,
     ^,
+    deepcopy_internal,
     hash,
     length,
     parent,

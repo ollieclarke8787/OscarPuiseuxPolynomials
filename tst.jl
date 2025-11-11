@@ -2,6 +2,13 @@ using Revise
 using OscarPuiseuxPolynomial
 using Oscar
 
+
+Kt,(t,) = puiseux_polynomial_ring(QQ,["t"]);
+Ktu,(u1,u2) = polynomial_ring(Kt,[:u1,:u2]);
+f = u1;
+w = [Ktu(u1+t), zero(Ktu)]
+evaluate(f, w)
+
 K, (t,) = puiseux_polynomial_ring(QQ, ["t"])
 nu = tropical_semiring_map(K,t,max)
 nu(t)

@@ -571,13 +571,14 @@ version = "0.5.6+0"
 
 [[deps.Oscar]]
 deps = ["AbstractAlgebra", "AlgebraicSolving", "Compat", "Distributed", "GAP", "Hecke", "JSON", "JSON3", "LazyArtifacts", "Markdown", "Mongoc", "Nemo", "NetworkOptions", "Pkg", "Polymake", "ProgressMeter", "Random", "RandomExtensions", "Serialization", "Singular", "TOPCOM_jll", "UUIDs", "cohomCalg_jll", "f4ncgb_jll", "lib4ti2_jll"]
-git-tree-sha1 = "f94d326840e2b0a72bdc5169fe74585625ada766"
+git-tree-sha1 = "eec786c7b40717336ceb1f2fcefe3ff23333b6bf"
 repo-rev = "master"
 repo-url = "https://github.com/oscar-system/Oscar.jl.git"
 uuid = "f1435218-dba5-11e9-1e4d-f1a5fab5fc13"
 version = "1.6.0-DEV"
 
 [[deps.OscarPuiseuxPolynomial]]
+deps = ["Oscar"]
 path = "."
 uuid = "7e8d91a7-ef99-4171-8ecc-0b23a9b9da6d"
 version = "1.0.0-DEV"

@@ -66,6 +66,23 @@ function puiseux_polynomial_ring_elem(
     return pf
 end
 
+
+#################################################################################
+#
+# Deep Copy
+#
+##################################################################################
+
+function deepcopy_internal(f::MPuiseuxPolyRingElem, dict::IdDict)
+    return MPuiseuxPolyRingElem(
+        parent(f),
+        deepcopy_internal(poly(f), dict),
+        deepcopy_internal(shift(f), dict),
+        scale(f)
+    )
+end
+
+
 #################################################################################
 #
 # Constructors
