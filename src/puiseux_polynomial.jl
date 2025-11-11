@@ -177,24 +177,26 @@ function (Kt::MPuiseuxPolyRing)()
     return zero(Kt)
 end
 
-function (Kt::MPuiseuxPolyRing)(c::Int)
+function (Kt::MPuiseuxPolyRing)(c::Union{Integer,ZZRingElem})
     return MPuiseuxPolyRingElem(Kt,underlying_polynomial_ring(Kt)(c))
 end
 
-function (Kt::MPuiseuxPolyRing)(c::Rational{Int})
-    return MPuiseuxPolyRingElem(Kt,underlying_polynomial_ring(Kt)(c))
-end
-
-function (Kt::MPuiseuxPolyRing)(c::RingElem)
+function (Kt::MPuiseuxPolyRing)(c::Rational) # may fail depending on characteristic
     return MPuiseuxPolyRingElem(Kt,underlying_polynomial_ring(Kt)(c))
 end
 
 function (Kt::MPuiseuxPolyRing{T})(c::T) where T <: FieldElement
     return MPuiseuxPolyRingElem(Kt,underlying_polynomial_ring(Kt)(c))
 end
+
 function (Kt::MPuiseuxPolyRing{T})(ct::MPuiseuxPolyRingElem{T}) where T <: FieldElement
     return ct
 end
+
+function (Kt::MPuiseuxPolyRing)(c::RingElem) # may fail depending on types
+    return MPuiseuxPolyRingElem(Kt,underlying_polynomial_ring(Kt)(c))
+end
+
 
 #################################################################################
 #
@@ -217,7 +219,12 @@ nvars(R::MPuiseuxPolyRing) = nvars(underlying_polynomial_ring(R))
 zero(R::MPuiseuxPolyRing) = puiseux_polynomial_ring_elem(R, zero(underlying_polynomial_ring(R)); skip_normalization=true)
 one(R::MPuiseuxPolyRing) = puiseux_polynomial_ring_elem(R, one(underlying_polynomial_ring(R)); skip_normalization=true)
 iszero(f::MPuiseuxPolyRingElem) = iszero(poly(f))
-isone(f::MPuiseuxPolyRingElem) = isone(poly(f)) && shift(f) == 0 && scale(f) == 1
+isone(f::MPuiseuxPolyRingElem) = isone(poly(f)) && iszero(shift(f)) && scale(f) == 1
+
+function is_unit(f::MPuiseuxPolyRingElem{T}) where T <: FieldElement
+    # check that f is constant with unit coefficient
+    return length(f) == 1 && is_zero(shift(f)) && is_unit(first(coefficients(f)))
+end
 
 function ==(f::MPuiseuxPolyRingElem, g::MPuiseuxPolyRingElem)
     @assert parent(f) == parent(g) "elements must be in the same ring"

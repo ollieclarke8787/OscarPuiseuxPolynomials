@@ -20,6 +20,7 @@ import Oscar:
     exponents,
     gens,
     initial,
+    is_unit,
     isone,
     iszero,
     monomials,
