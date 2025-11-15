@@ -190,7 +190,10 @@ function (Kt::MPuiseuxPolyRing{T})(c::T) where T <: FieldElement
 end
 
 function (Kt::MPuiseuxPolyRing{T})(ct::MPuiseuxPolyRingElem{T}) where T <: FieldElement
-    return ct
+    if parent(Kt) === Kt
+        return ct
+    end
+    error("Unable to coerce puiseux polynomial")
 end
 
 function (Kt::MPuiseuxPolyRing)(c::RingElem) # may fail depending on types
