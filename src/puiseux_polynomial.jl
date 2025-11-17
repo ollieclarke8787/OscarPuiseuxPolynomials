@@ -422,7 +422,7 @@ function ^(f::MPuiseuxPolyRingElem, a::Int)
     return f^(ZZ(a))
 end
 
-function //(f::MPuiseuxPolyRingElem{K}, a::K) where K <: FieldElement
+function //(f::MPuiseuxPolyRingElem{K}, a::K) where K <: FieldElem
     @assert !iszero(a) "division by zero"
     return puiseux_polynomial_ring_elem(parent(f), poly(f)*1//a, shift(f), scale(f); skip_normalization=true)
 end
