@@ -17,6 +17,7 @@ import Oscar:
     characteristic,
     coefficient_ring,
     coefficients,
+    divrem,
     elem_type,
     exponents,
     gens,

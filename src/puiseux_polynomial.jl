@@ -430,3 +430,43 @@ end
 function //(f::MPuiseuxPolyRingElem, a::Int)
     return f//coefficient_ring(f)(a)
 end
+
+function divrem(f::MPuiseuxPolyRingElem{K}, g::MPuiseuxPolyRingElem{K}) where K<: FieldElem
+    @assert parent(f) == parent(g) "elements must be in the same ring"
+    @assert !iszero(g) "division by zero"
+
+    # rescale both to the lcm of their scales
+    commonScale = lcm(scale(f), scale(g))
+    frescaled = rescale(f, commonScale)
+    grescaled = rescale(g, commonScale)
+
+    if any(shift(frescaled) .< shift(grescaled))
+        # degree of f is less than degree of g in at least one variable
+        return zero(parent(f)), f
+    end
+
+    # adjust for shifts
+    t = gens(underlying_polynomial_ring(parent(f)))
+    fPoly = prod(t.^shift(frescaled))*poly(frescaled)
+    gPoly = prod(t.^shift(grescaled))*poly(grescaled)
+
+    # perform divrem in underlying polynomial ring
+    qPoly, rPoly = divrem(fPoly, gPoly)
+
+    # construct quotient and remainder Puiseux polynomials
+    n = nvars(parent(f))
+    q = puiseux_polynomial_ring_elem(
+        parent(f),
+        qPoly,
+        zeros(ZZRingElem,n),
+        commonScale
+    )
+    r = puiseux_polynomial_ring_elem(
+        parent(f),
+        rPoly,
+        zeros(ZZRingElem,n),
+        commonScale
+    )
+
+    return q, r
+end
