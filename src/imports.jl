@@ -14,6 +14,7 @@ import Base:
 import Oscar:
     base_ring,
     base_ring_type,
+    characteristic,
     coefficient_ring,
     coefficients,
     elem_type,
