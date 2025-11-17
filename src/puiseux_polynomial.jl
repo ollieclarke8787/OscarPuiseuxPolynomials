@@ -221,6 +221,9 @@ ngens(R::MPuiseuxPolyRing) = ngens(underlying_polynomial_ring(R))
 nvars(R::MPuiseuxPolyRing) = nvars(underlying_polynomial_ring(R))
 zero(R::MPuiseuxPolyRing) = puiseux_polynomial_ring_elem(R, zero(underlying_polynomial_ring(R)); skip_normalization=true)
 one(R::MPuiseuxPolyRing) = puiseux_polynomial_ring_elem(R, one(underlying_polynomial_ring(R)); skip_normalization=true)
+
+characteristic(R::MPuiseuxPolyRing) = characteristic(coefficient_ring(R))
+
 iszero(f::MPuiseuxPolyRingElem) = iszero(poly(f))
 isone(f::MPuiseuxPolyRingElem) = isone(poly(f)) && iszero(shift(f)) && scale(f) == 1
 
