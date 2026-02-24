@@ -148,5 +148,8 @@ using Oscar
         @test K(4//5) == puiseux_polynomial_ring_elem(K,F(4//5))
         @test K(0) == zero(K)
         @test K(1) == one(K)
+
+        i = Int8(-1)
+        @test u^i == u^(-1)
     end
 end
