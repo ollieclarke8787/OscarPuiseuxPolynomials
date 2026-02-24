@@ -418,7 +418,7 @@ function ^(f::MPuiseuxPolyRingElem, a::ZZRingElem)
     return reduce(*, [ f for i in 1:a ])
 end
 
-function ^(f::MPuiseuxPolyRingElem, a::Int)
+function ^(f::MPuiseuxPolyRingElem, a::Union{Int,Int8})
     return f^(ZZ(a))
 end
 
