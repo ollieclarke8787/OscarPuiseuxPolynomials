@@ -23,6 +23,7 @@ import Oscar:
     gens,
     initial,
     is_unit,
+    inv,
     isone,
     iszero,
     monomials,

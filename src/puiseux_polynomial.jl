@@ -470,3 +470,7 @@ function divrem(f::MPuiseuxPolyRingElem{K}, g::MPuiseuxPolyRingElem{K}) where K<
 
     return q, r
 end
+
+# inverse of a Puiseux polynomial
+# inverse of a monomial
+inv(f::MPuiseuxPolyRingElem) = 1//f
